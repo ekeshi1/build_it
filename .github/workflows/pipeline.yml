@@ -22,5 +22,5 @@ jobs:
           go clean --modcache
           go build -o main
       - name : External Testing
-        run: go test /test/...
+        run: go test ./...
 
