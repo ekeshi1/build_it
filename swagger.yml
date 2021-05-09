@@ -1,0 +1,204 @@
+swagger: "2.0"
+consumes: 
+  - application/json
+info:
+  title: BuildIT Api Documentation
+  version: 1.0.0
+  description: Documentation for BuildIT HTTP interface
+basePath: /api
+schemes:
+- "http"
+tags:
+  - name: "PlantHire"
+    description: "Apis related to PlantHire(internal)"
+  - name: "PurchaseOrder"
+    description: "APIS related to Pruchase Order"
+  - name: "Invoicing"  
+    description: "APIS related to Pruchase Order"
+
+paths:
+  /plant-hires:
+    post:
+      summary: "Create a plant hire request"
+      produces: 
+        - application/json
+      parameters:
+        - name: plant-hire-request
+          in: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/PlantHireRequest'
+      responses:
+        "201":
+          description: "Created"
+        "500":
+          description: "Internal server error"
+      tags: 
+      - PlantHire
+  /plant-hires/{id}:
+    patch: 
+      summary: "Modify a plant hire request before it is approved.(Only dates)
+                Also used to approve or reject"
+      produces:
+        - application/json
+      parameters:
+        - name: id 
+          in: path
+          required: true
+          type: string
+        - name: plant-modify-request
+          in: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/PatchRequest'
+      responses:
+        200: 
+          description: "Successfull"
+          schema:
+            $ref: "#/definitions/PlantModificationResponse"
+        500:
+          description: "Error"
+    get:
+      summary: "Check the status of a plant hire request"
+      responses:
+        200:
+          description: "Found"
+          schema:
+            $ref: '#/definitions/PlantHireRequest'
+        404:
+          description: "Plant with this id does not exist"
+  /plant-hires/{id}/cancelation:
+    post:
+      summary: "Try to cancel a Plant Hire as a site engineer."
+      produces: 
+        - application/json
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true  
+      responses:
+        200:
+          description: "Successfull"
+          schema:
+            $ref: "#/definitions/PlantModificationResponse"
+        500:
+          description: "Error"        
+
+  /purchase-orders:
+    get:
+      summary: "get all purchase orders"
+      produces:
+      - application/json
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/PurchaseOrder'
+        500:
+          description: "Error"      
+
+
+definitions:
+  PlantHireRequest:
+    type: object
+    properties: 
+      plantId:
+        type: integer
+        format: int64
+      constructionSiteId:
+        type: integer
+        format: int64
+      supplierId:
+        type: integer
+        format: int64  
+      siteEngineerId:
+        type: integer
+        format: int64
+      plantArrivalDate:
+        type: string
+        format: date
+        example: 2017-07-21
+        description: "Date when the site engineer needs to use the plant"
+      plantReturnDate:
+        type: string
+        format: date
+        example: 2017-07-21
+        description: "Date when the site engineer no longer needs the plant"
+      plantTotalPrice:
+        type: number
+      status:
+        type: string
+      createdAt:
+        type: string
+        format: date
+        example: 2017-07-21
+      updatedAt:
+        type: string
+        format: date
+        example: 2017-07-21  
+  PatchRequest:
+    type: array
+    items:
+      $ref: "#/definitions/PatchDocument"
+  PatchDocument: 
+    description: A JSONPatch document as defined by RFC 6902 
+    required:
+     - "op"
+     - "path"
+    properties: 
+     op: 
+      type: string 
+      description: The operation to be performed 
+      enum:
+       - "add"
+       - "remove"
+       - "replace"
+       - "move"
+       - "copy"
+       - "test"
+     path: 
+      type: string 
+      description: A JSON-Pointer 
+     value: 
+      type: object 
+      description: The value to be used within the operations.
+     from: 
+      type: string 
+      description: A string containing a JSON Pointer value.
+  PlantModificationResponse:
+    description: "response returned after a modification request"
+    required:
+      - approved
+    properties: 
+      approved:
+        type: boolean
+  PurchaseOrder:
+    description: "Purchase Order created to hire a plant"
+    properties:
+      id:
+        type: integer
+        format: int64
+      plantHireId: 
+        type: string
+      description:
+        type: string
+      createdDate:
+        type: string
+        format: date
+        example: 2017-07-21
+      updatedDate:
+        type: string
+        format: date
+        example: 2017-07-21
+      creator: 
+        type: string
+      deliveryAddress: 
+        type: string
+      deliveryStatus:
+        type: string
+      status:
+        type: string
+          
