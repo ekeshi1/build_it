@@ -104,7 +104,10 @@ paths:
 definitions:
   PlantHireRequest:
     type: object
-    properties: 
+    properties:
+      id:
+        type: integer
+        format: int64 
       plantId:
         type: integer
         format: int64
@@ -185,11 +188,11 @@ definitions:
         type: string
       description:
         type: string
-      createdDate:
+      createdAt:
         type: string
         format: date
         example: 2017-07-21
-      updatedDate:
+      updatedAt:
         type: string
         format: date
         example: 2017-07-21
