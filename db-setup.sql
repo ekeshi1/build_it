@@ -1,60 +1,60 @@
-create table plantHire
+create table plant_hires
 (
     id         SERIAL PRIMARY KEY,
-    plantId        INTEGER NOT NULL,
-    constructionSiteId        INTEGER NOT NULL,
-    supplier        INTEGER NOT NULL,
-    siteEngineerId        INTEGER NOT NULL,
-    plantArrivalDate date  NOT NULL,
-    plantReturnDate date  NOT NULL,
-    plantTotalPrice FLOAT NOT NULL,
-    createdAt timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updatedAt timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    plant_id        INTEGER NOT NULL,
+    construction_site_id        INTEGER NOT NULL,
+    supplier_id        INTEGER NOT NULL,
+    site_engineer_id        INTEGER NOT NULL,
+    plant_arrival_date date  NOT NULL,
+    plant_return_date date  NOT NULL,
+    plant_total_price FLOAT NOT NULL,
+    created_at timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR NOT NULL
 );
 
-insert into plantHire
-        (plantId,constructionSiteId,supplier,siteEngineerId,plantArrivalDate,plantReturnDate, plantTotalPrice, status)
+insert into plant_hires
+        (plant_id,construction_site_id,supplier_id,site_engineer_id,plant_arrival_date,plant_return_date, plant_total_price, status)
 values  
 	(1,1,2,2,'2021-05-18','2021-05-20',123.5,'CREATED'),
         (2,3,1,1,'2021-05-19','2021-05-21',63.5,'CREATED'),
         (1,2,3,1,'2021-05-18','2021-05-20',123.5,'CREATED');
         
-create table purchaseOrder(
+create table purchase_orders(
     id SERIAL PRIMARY KEY,
-    plantHireId INTEGER NOT NULL,
+    plant_hire_id INTEGER NOT NULL,
     description VARCHAR ,
-    createdAt timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updatedAt timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    created_at timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     creator varchar NOT NULL,
-    deliveryAddress varchar NOT NULL,
-    deliveryStatus varchar NOT NULL,
-  	status varchar NOT NULL,
+    delivery_address varchar NOT NULL,
+    delivery_status varchar NOT NULL,
+    status varchar NOT NULL,
 
     CONSTRAINT fk_plant
-      FOREIGN KEY(plantHireId) 
-	  REFERENCES plantHire(id)
+      FOREIGN KEY(plant_hire_id) 
+	  REFERENCES plant_hires(id)
 );
 
-insert into purchaseOrder
-        (plantHireId,description,creator,deliveryAddress, deliveryStatus,status)
+insert into purchase_orders
+        (plant_hire_id,description,creator,delivery_address, delivery_status,status)
 values  
 	(1,'just a description1','BUILD_IT','Address1','CREATED','CREATED'),
         (2,'just a description2','BUILD_IT','Address2','CREATED','CREATED'),
         (3,'just a description3','BUILD_IT','Address3','CREATED','CREATED');
         
-create table invoice(
+create table invoices(
     id SERIAL PRIMARY KEY,
-    purchaseOrderId INTEGER NOT NULL,
-    createdDate timestamp DEFAULT CURRENT_TIMESTAMP,
-    updatedDate timestamp DEFAULT CURRENT_TIMESTAMP,
-    lastReminderDate date,
-    paymentStatus varchar NOT NULL,
+    purchase_order_id INTEGER NOT NULL,
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    last_reminder_date date,
+    payment_status varchar NOT NULL,
     
     CONSTRAINT fk_purchase_order
-      FOREIGN KEY(purchaseOrderId) 
-	  REFERENCES purchaseOrder(id)
+      FOREIGN KEY(purchase_order_id) 
+	  REFERENCES purchase_orders(id)
 );
 
 
-insert into invoice(purchaseOrderId, lastReminderDate, paymentStatus) values (1, '2021-06-15', 'CREATED'), (3, CURRENT_DATE, 'CREATED');
+insert into invoices(purchase_order_id, last_reminder_date, payment_status) values (1, '2021-06-15', 'CREATED'), (3, CURRENT_DATE, 'CREATED');
