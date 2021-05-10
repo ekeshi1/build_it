@@ -5,6 +5,7 @@ import "cs-ut-ee/build-it-project/pkg/internald/domain"
 //Driven port
 type PlantHireRepositoryPort interface {
 	CreatePlantHire(po *domain.PlantHire) (*domain.PlantHire, error)
+	ModifyPlantHire(p []byte, id int64) (*domain.PlantHire, error)
 }
 
 type PurchaseOrderRepositoryPort interface {

@@ -6,7 +6,8 @@ package http2
 import (
 	"encoding/json"
 	"net/http"
-
+	"io/ioutil"
+	"strconv"
 	"cs-ut-ee/build-it-project/pkg/internald/domain"
 	"cs-ut-ee/build-it-project/pkg/internald/ports"
 
@@ -31,6 +32,7 @@ func NewHTTPHandler(phs ports.PlantHireServicePort, pos ports.PurchaseOrderServi
 
 func (h *HTTPHandler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/api/plant-hires", h.CreatePlantHire).Methods(http.MethodPost)
+	router.HandleFunc("/api/plant-hires/{id}", h.ModifyPlantHire).Methods(http.MethodPatch)
 
 }
 
@@ -65,6 +67,30 @@ func (h *HTTPHandler) CreatePlantHire(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (h *HTTPHandler) ModifyPlantHire(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key, err := strconv.ParseInt(vars["id"], 10, 64)
+	
+	patchJSON, _ := ioutil.ReadAll(r.Body)
+	
+	mph, _ := h.plantHireService.ModifyPlantHire(patchJSON, key)
+
+	if mph == nil {
+		log.Errorf("Could not modify ph", err)
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
+
+	log.Debug(mph.Id)
+	log.Debug(mph)
+	w.WriteHeader(http.StatusOK)
+
+	err = json.NewEncoder(w).Encode(&mph)
+	if err != nil {
+		log.Errorf("Could not encode json, err %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+}
 /*
 func (h *PlantHandler) ModifyPO(w http.ResponseWriter, r *http.Request) {
 	log.Info("Modifying PO dates")

@@ -29,3 +29,15 @@ func (s *PlantHireService) CreatePlantHire(ph *domain.PlantHire) (*domain.PlantH
 	log.Debugf("Created plant with id : ", createdPlantHire.Id)
 	return createdPlantHire, nil
 }
+
+func(s *PlantHireService) ModifyPlantHire(p []byte, id int64) (*domain.PlantHire, error){
+	modifiedPlantHire, err := s.plantHireRepository.ModifyPlantHire(p, id)
+
+	if err != nil {
+		log.Errorf("Couldn't modify plant with error: ", err)
+		return nil, err
+	}
+
+	log.Debugf("Created modified plant with id : ", modifiedPlantHire.Id)
+	return modifiedPlantHire, nil
+}
