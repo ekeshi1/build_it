@@ -56,7 +56,7 @@ paths:
           description: "Successfull"
           schema:
             $ref: "#/definitions/PlantModificationResponse"
-        500:
+        404:
           description: "Error"
     get:
       summary: "Check the status of a plant hire request"

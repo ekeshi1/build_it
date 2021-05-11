@@ -77,7 +77,7 @@ func (h *HTTPHandler) ModifyPlantHire(w http.ResponseWriter, r *http.Request) {
 	p1 := strings.Contains(string(patchJSON), "plantArrivalDate")
 	p2 := strings.Contains(string(patchJSON), "plantReturnDate")
 	if p1 == false && p2 == false {
-		http.Error(w, "", http.StatusUnauthorized)
+		http.Error(w, "It is now allowed to update this data", http.StatusBadRequest)
 		return
 	}
 
