@@ -108,7 +108,7 @@ func (h *HTTPHandler) GetPlantHireById(w http.ResponseWriter, r *http.Request) {
 	plants, err := h.plantHireService.GetPlantHireById(key)
 	if err != nil {
 		log.Error(err.Error())
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Plant with this id does not exist", http.StatusNotFound)
 		return
 	}
 	// write success response
