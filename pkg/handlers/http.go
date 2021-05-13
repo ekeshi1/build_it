@@ -87,7 +87,7 @@ func (h *HTTPHandler) ModifyPlantHire(w http.ResponseWriter, r *http.Request) {
 
 	if mph == nil {
 		log.Errorf("Could not modify ph", err)
-		http.Error(w, "", http.StatusBadRequest)
+		http.Error(w, "Plant with this id does not exist", http.StatusNotFound)
 		return
 	}
 
