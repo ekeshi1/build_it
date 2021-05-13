@@ -4,16 +4,17 @@ package http2
 //it receives an http request and based on it it is able to call the correct service
 
 import (
-	"encoding/json"
-	"net/http"
-	"io/ioutil"
-	"strconv"
 	"cs-ut-ee/build-it-project/pkg/internald/domain"
 	"cs-ut-ee/build-it-project/pkg/internald/ports"
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
+	"strconv"
+
+	"strings"
 
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
-	"strings"
 )
 
 type HTTPHandler struct {
@@ -34,6 +35,7 @@ func NewHTTPHandler(phs ports.PlantHireServicePort, pos ports.PurchaseOrderServi
 func (h *HTTPHandler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/api/plant-hires", h.CreatePlantHire).Methods(http.MethodPost)
 	router.HandleFunc("/api/plant-hires/{id}", h.ModifyPlantHire).Methods(http.MethodPatch)
+	router.HandleFunc("/api/plant-hires/{id}", h.GetPlantHireById).Methods(http.MethodGet)
 
 }
 
@@ -71,9 +73,9 @@ func (h *HTTPHandler) CreatePlantHire(w http.ResponseWriter, r *http.Request) {
 func (h *HTTPHandler) ModifyPlantHire(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key, err := strconv.ParseInt(vars["id"], 10, 64)
-	
+
 	patchJSON, _ := ioutil.ReadAll(r.Body)
-	
+
 	p1 := strings.Contains(string(patchJSON), "plantArrivalDate")
 	p2 := strings.Contains(string(patchJSON), "plantReturnDate")
 	if p1 == false && p2 == false {
@@ -99,6 +101,24 @@ func (h *HTTPHandler) ModifyPlantHire(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 }
+
+func (h *HTTPHandler) GetPlantHireById(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key, err := strconv.ParseInt(vars["id"], 10, 64)
+	plants, err := h.plantHireService.GetPlantHireById(key)
+	if err != nil {
+		log.Error(err.Error())
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// write success response
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(&plants)
+	if err != nil {
+		log.Errorf("Could not encode json, err %v", err)
+	}
+}
+
 /*
 func (h *PlantHandler) ModifyPO(w http.ResponseWriter, r *http.Request) {
 	log.Info("Modifying PO dates")

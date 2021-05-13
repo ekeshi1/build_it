@@ -8,6 +8,7 @@ import (
 
 	"encoding/json"
 	"fmt"
+
 	jsonpatch "github.com/evanphx/json-patch"
 )
 
@@ -34,8 +35,8 @@ func (s *PlantHireService) CreatePlantHire(ph *domain.PlantHire) (*domain.PlantH
 	return createdPlantHire, nil
 }
 
-func(s *PlantHireService) ModifyPlantHire(p []byte, id int64) (*domain.PlantHire, error){
-	
+func (s *PlantHireService) ModifyPlantHire(p []byte, id int64) (*domain.PlantHire, error) {
+
 	plantHire, err := s.plantHireRepository.GetPlantHireById(id)
 
 	if err != nil {
@@ -71,4 +72,14 @@ func(s *PlantHireService) ModifyPlantHire(p []byte, id int64) (*domain.PlantHire
 	}
 	log.Debugf("Created modified plant with id : ", modifiedPlantHire.Id)
 	return mph, nil
+}
+
+func (s *PlantHireService) GetPlantHireById(id int64) (*domain.PlantHire, error) {
+	plantHire, err := s.plantHireRepository.GetPlantHireById(id)
+
+	if err != nil {
+		log.Errorf("Couldn't get plant with error: ", err)
+		return nil, err
+	}
+	return plantHire, nil
 }

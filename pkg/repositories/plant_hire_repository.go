@@ -2,7 +2,7 @@ package repositories
 
 import (
 	"cs-ut-ee/build-it-project/pkg/internald/domain"
-	
+
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -32,7 +32,7 @@ func (phr *PlantHireRepository) CreatePlantHire(ph *domain.PlantHire) (*domain.P
 	return ph, nil
 }
 
-func (phr *PlantHireRepository) GetPlantHireById(id int64) (*domain.PlantHire, error){
+func (phr *PlantHireRepository) GetPlantHireById(id int64) (*domain.PlantHire, error) {
 	var plantHire *domain.PlantHire
 	err := phr.gormDB.First(&plantHire, id).Error
 
@@ -44,7 +44,7 @@ func (phr *PlantHireRepository) GetPlantHireById(id int64) (*domain.PlantHire, e
 	return plantHire, nil
 }
 
-func (phr *PlantHireRepository) ModifyPlantHire(plantHire *domain.PlantHire, modifiedPlantHire *domain.PlantHire) (*domain.PlantHire, error){
+func (phr *PlantHireRepository) ModifyPlantHire(plantHire *domain.PlantHire, modifiedPlantHire *domain.PlantHire) (*domain.PlantHire, error) {
 	err := phr.gormDB.Model(&plantHire).Save(modifiedPlantHire).Error
 
 	if err != nil {
