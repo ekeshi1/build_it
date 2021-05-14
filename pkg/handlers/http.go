@@ -36,7 +36,7 @@ func (h *HTTPHandler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/api/plant-hires", h.CreatePlantHire).Methods(http.MethodPost)
 	router.HandleFunc("/api/plant-hires/{id}", h.ModifyPlantHireDates).Methods(http.MethodPatch)
 	router.HandleFunc("/api/plant-hires/{id}", h.GetPlantHireById).Methods(http.MethodGet)
-  router.HandleFunc("/api/plant-hires/{id}/status", h.ModifyPlantHireStatus).Methods(http.MethodPatch)
+	router.HandleFunc("/api/plant-hires/{id}/status", h.ModifyPlantHireStatus).Methods(http.MethodPatch)
 	//router.HandleFunc("/api/plant-hires/{id}/purchase-order", h.createPO).Methods(http.MethodPost)
 }
 
@@ -57,7 +57,6 @@ func (h *HTTPHandler) createPO(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "", http.StatusBadRequest)
 		return
 	}
-
 
 }
 
@@ -176,6 +175,21 @@ func (h *HTTPHandler) ModifyPlantHireStatus(w http.ResponseWriter, r *http.Reque
 		log.Errorf("Could not modify ph", err)
 		http.Error(w, "Plant with this id does not exist", http.StatusNotFound)
 		return
+	}
+
+	if mph.Status == "APPROVED" {
+		var poReq domain.PurchaseOrder
+		poReq.PlantHireId = mph.Id
+		poReq.Description = "Purchase order is created"
+		poReq.Creator = "BUILD_IT"
+
+		po, _ := h.purchaseOrderService.CreatePurchaseOrder(&poReq)
+
+		if po == nil {
+			log.Errorf("Could not create po", err)
+			http.Error(w, "Could not create po but status updated", http.StatusBadRequest)
+			return
+		}
 	}
 
 	log.Debug(mph.Id)
