@@ -8,8 +8,5 @@ type PlantHireServicePort interface {
 	GetPlantHireById(id int64) (*domain.PlantHire, error)
 }
 
-type PurchaseOrderServicePort interface {
-}
-
 type InvoiceServicePort interface {
 }
