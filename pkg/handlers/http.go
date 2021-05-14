@@ -36,7 +36,29 @@ func (h *HTTPHandler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/api/plant-hires", h.CreatePlantHire).Methods(http.MethodPost)
 	router.HandleFunc("/api/plant-hires/{id}", h.ModifyPlantHireDates).Methods(http.MethodPatch)
 	router.HandleFunc("/api/plant-hires/{id}", h.GetPlantHireById).Methods(http.MethodGet)
-	router.HandleFunc("/api/plant-hires/{id}/status", h.ModifyPlantHireStatus).Methods(http.MethodPatch)
+  router.HandleFunc("/api/plant-hires/{id}/status", h.ModifyPlantHireStatus).Methods(http.MethodPatch)
+	//router.HandleFunc("/api/plant-hires/{id}/purchase-order", h.createPO).Methods(http.MethodPost)
+}
+
+func (h *HTTPHandler) createPO(w http.ResponseWriter, r *http.Request) {
+	var poReq domain.PurchaseOrder
+	err := json.NewDecoder(r.Body).Decode(&poReq)
+	defer r.Body.Close()
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	po, _ := h.purchaseOrderService.CreatePurchaseOrder(&poReq)
+
+	if po == nil {
+		log.Errorf("Could not create po", err)
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
+
+
 }
 
 func (h *HTTPHandler) CreatePlantHire(w http.ResponseWriter, r *http.Request) {
@@ -53,7 +75,7 @@ func (h *HTTPHandler) CreatePlantHire(w http.ResponseWriter, r *http.Request) {
 	ph, _ := h.plantHireService.CreatePlantHire(&phReq)
 
 	if ph == nil {
-		log.Errorf("Could not create po", err)
+		log.Errorf("Could not create plant hire", err)
 		http.Error(w, "", http.StatusBadRequest)
 		return
 	}

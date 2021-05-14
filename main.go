@@ -80,8 +80,11 @@ func main() {
 	httpRouter := mux.NewRouter()
 	plantHireRepo := repositories.NewPlantHireRepository(dbConn)
 	plantHireService := services.NewPlantHireService(plantHireRepo)
+	purchaseOrderRepo := repositories.NewPurchaseOrderRepository(dbConn)
+	purchaseOrderDriverService := services.NewPurchaseOrderDriverService()
+	purchaseOrderService := services.NewPurchaseOrderService(purchaseOrderRepo, purchaseOrderDriverService)
 
-	httpHandler := http2.NewHTTPHandler(plantHireService, nil, nil)
+	httpHandler := http2.NewHTTPHandler(plantHireService, purchaseOrderService, nil)
 	httpHandler.RegisterRoutes(httpRouter)
 	httpSrv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", httpServicePort),

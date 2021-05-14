@@ -2,6 +2,13 @@ package domain
 
 import "time"
 
+const (
+	POStatusCreated           = "CREATED"
+	POStatusSent              = "SENT"
+	PODeliveryStatusCreated   = "CREATED"
+	PODeliveryStatusDelivered = "DELIVERED"
+)
+
 type PlantHire struct {
 	Id                 int64     `json:"id"`
 	PlantId            int64     `json:"plantId"`
