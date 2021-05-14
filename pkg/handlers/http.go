@@ -34,9 +34,9 @@ func NewHTTPHandler(phs ports.PlantHireServicePort, pos ports.PurchaseOrderServi
 
 func (h *HTTPHandler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/api/plant-hires", h.CreatePlantHire).Methods(http.MethodPost)
-	router.HandleFunc("/api/plant-hires/{id}", h.ModifyPlantHire).Methods(http.MethodPatch)
+	router.HandleFunc("/api/plant-hires/{id}", h.ModifyPlantHireDates).Methods(http.MethodPatch)
 	router.HandleFunc("/api/plant-hires/{id}", h.GetPlantHireById).Methods(http.MethodGet)
-
+	router.HandleFunc("/api/plant-hires/{id}/status", h.ModifyPlantHireStatus).Methods(http.MethodPatch)
 }
 
 func (h *HTTPHandler) CreatePlantHire(w http.ResponseWriter, r *http.Request) {
@@ -70,7 +70,7 @@ func (h *HTTPHandler) CreatePlantHire(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (h *HTTPHandler) ModifyPlantHire(w http.ResponseWriter, r *http.Request) {
+func (h *HTTPHandler) ModifyPlantHireDates(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key, err := strconv.ParseInt(vars["id"], 10, 64)
 
@@ -116,6 +116,54 @@ func (h *HTTPHandler) GetPlantHireById(w http.ResponseWriter, r *http.Request) {
 	err = json.NewEncoder(w).Encode(&plants)
 	if err != nil {
 		log.Errorf("Could not encode json, err %v", err)
+	}
+}
+
+func (h *HTTPHandler) ModifyPlantHireStatus(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key, err := strconv.ParseInt(vars["id"], 10, 64)
+
+	patchJSON, _ := ioutil.ReadAll(r.Body)
+
+	p1 := strings.Contains(string(patchJSON), "status")
+	b1 := strings.Contains(string(patchJSON), "APPROVED")
+	b2 := strings.Contains(string(patchJSON), "REJECTED")
+	b3 := strings.Contains(string(patchJSON), "MODIFIED")
+
+	s1 := strings.Contains(string(patchJSON), "approved")
+	s2 := strings.Contains(string(patchJSON), "rejected")
+	s3 := strings.Contains(string(patchJSON), "modified")
+
+	if p1 == false {
+		http.Error(w, "It is now allowed to update this data", http.StatusBadRequest)
+		return
+	}
+
+	if b1 == false && b2 == false && b3 == false {
+		if s1 == true || s2 == true || s3 == true {
+			http.Error(w, "The value of status should be uppercase", http.StatusBadRequest)
+			return
+		}
+		http.Error(w, "The value is not correct", http.StatusBadRequest)
+		return
+	}
+
+	mph, _ := h.plantHireService.ModifyPlantHire(patchJSON, key)
+
+	if mph == nil {
+		log.Errorf("Could not modify ph", err)
+		http.Error(w, "Plant with this id does not exist", http.StatusNotFound)
+		return
+	}
+
+	log.Debug(mph.Id)
+	log.Debug(mph)
+	w.WriteHeader(http.StatusOK)
+
+	err = json.NewEncoder(w).Encode(&mph)
+	if err != nil {
+		log.Errorf("Could not encode json, err %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 }
 
