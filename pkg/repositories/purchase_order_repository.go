@@ -43,3 +43,13 @@ func (por *PurchaseOrderRepository) UpdatePOStatus(oldPo *domain.PurchaseOrder, 
 	log.Infof("Updated po %v", oldPo)
 	return oldPo, nil
 }
+
+func (por *PurchaseOrderRepository) GetAllPurchaseOrders() ([]*domain.PurchaseOrder, error) {
+	var purchaseOrders []*domain.PurchaseOrder
+	if res := por.gormDB.Find(&purchaseOrders); res.Error != nil {
+		log.Errorf("Error retrieving all pos. Error: %v", res.Error)
+		return nil, res.Error
+	}
+	return purchaseOrders, nil
+
+}

@@ -50,3 +50,16 @@ func (pos *PurchaseOrderService) CreatePurchaseOrder(po *domain.PurchaseOrder) (
 
 	return updatedPo, nil
 }
+
+func (pos *PurchaseOrderService) GetAllPurchaseOrders() ([]*domain.PurchaseOrder, error) {
+
+	pOrders, err := pos.purchaseOrderRepository.GetAllPurchaseOrders()
+
+	if err != nil {
+		log.Errorf("Couldn't get pos. Err : ", err)
+		return nil, err
+	}
+
+	return pOrders, nil
+
+}

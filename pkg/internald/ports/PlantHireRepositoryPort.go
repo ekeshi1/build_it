@@ -12,6 +12,7 @@ type PlantHireRepositoryPort interface {
 type PurchaseOrderRepositoryPort interface {
 	CreatePO(po *domain.PurchaseOrder) (*domain.PurchaseOrder, error)
 	UpdatePOStatus(oldPo *domain.PurchaseOrder, status string) (*domain.PurchaseOrder, error)
+	GetAllPurchaseOrders() ([]*domain.PurchaseOrder, error)
 }
 
 type InvoiceRepositoryPort interface {

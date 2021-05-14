@@ -86,6 +86,7 @@ func main() {
 
 	httpHandler := http2.NewHTTPHandler(plantHireService, purchaseOrderService, nil)
 	httpHandler.RegisterRoutes(httpRouter)
+	httpHandler.RegisterPORoutes(httpRouter)
 	httpSrv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", httpServicePort),
 		Handler: httpRouter,

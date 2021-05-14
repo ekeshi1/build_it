@@ -37,8 +37,29 @@ func (h *HTTPHandler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/api/plant-hires/{id}", h.ModifyPlantHire).Methods(http.MethodPatch)
 	router.HandleFunc("/api/plant-hires/{id}", h.GetPlantHireById).Methods(http.MethodGet)
 	//router.HandleFunc("/api/plant-hires/{id}/purchase-order", h.createPO).Methods(http.MethodPost)
+
 }
 
+func (h *HTTPHandler) RegisterPORoutes(router *mux.Router) {
+	router.HandleFunc("/api/purchase-orders", h.GetAllPurchaseOrders).Methods(http.MethodGet)
+}
+
+func (h *HTTPHandler) GetAllPurchaseOrders(w http.ResponseWriter, r *http.Request) {
+
+	pos, err := h.purchaseOrderService.GetAllPurchaseOrders()
+
+	if err != nil {
+		log.Error(err.Error())
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// write success response
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(&pos)
+	if err != nil {
+		log.Errorf("Could not encode json, err %v", err)
+	}
+}
 func (h *HTTPHandler) createPO(w http.ResponseWriter, r *http.Request) {
 	var poReq domain.PurchaseOrder
 	err := json.NewDecoder(r.Body).Decode(&poReq)
