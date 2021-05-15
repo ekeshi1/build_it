@@ -38,7 +38,7 @@ func (h *HTTPHandler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/api/plant-hires/{id}", h.GetPlantHireById).Methods(http.MethodGet)
 	router.HandleFunc("/api/plant-hires/{id}/status", h.ModifyPlantHireStatus).Methods(http.MethodPatch)
 	//router.HandleFunc("/api/plant-hires/{id}/purchase-order", h.createPO).Methods(http.MethodPost)
-	router.HandleFunc("/api/plant-hires/{id}/extension", h.ModifyPlantHireExtension).Methods(http.MethodPost)
+	router.HandleFunc("/api/plant-hires/{id}/extension", h.ModifyPlantHireExtension).Methods(http.MethodPut)
 }
 
 func (h *HTTPHandler) createPO(w http.ResponseWriter, r *http.Request) {
@@ -232,7 +232,7 @@ func (h *HTTPHandler) ModifyPlantHireExtension(w http.ResponseWriter, r *http.Re
 
 	log.Debug(mph.Id)
 	log.Debug(mph)
-	w.WriteHeader(http.StatusCreated)
+	w.WriteHeader(http.StatusOK)
 
 	err = json.NewEncoder(w).Encode(&mph)
 	if err != nil {
