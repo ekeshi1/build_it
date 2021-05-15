@@ -6,6 +6,7 @@ type PlantHireServicePort interface {
 	CreatePlantHire(po *domain.PlantHire) (*domain.PlantHire, error)
 	ModifyPlantHire(p []byte, id int64) (*domain.PlantHire, error)
 	GetPlantHireById(id int64) (*domain.PlantHire, error)
+	ModifyPlantHireExtension(id int64, p *domain.PlantHireExtensionDTO) (*domain.PlantHire, error)
 }
 
 type InvoiceServicePort interface {

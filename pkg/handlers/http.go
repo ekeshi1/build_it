@@ -38,6 +38,7 @@ func (h *HTTPHandler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/api/plant-hires/{id}", h.GetPlantHireById).Methods(http.MethodGet)
 	router.HandleFunc("/api/plant-hires/{id}/status", h.ModifyPlantHireStatus).Methods(http.MethodPatch)
 	//router.HandleFunc("/api/plant-hires/{id}/purchase-order", h.createPO).Methods(http.MethodPost)
+	router.HandleFunc("/api/plant-hires/{id}/extension", h.ModifyPlantHireExtension).Methods(http.MethodPost)
 }
 
 func (h *HTTPHandler) createPO(w http.ResponseWriter, r *http.Request) {
@@ -201,6 +202,44 @@ func (h *HTTPHandler) ModifyPlantHireStatus(w http.ResponseWriter, r *http.Reque
 		log.Errorf("Could not encode json, err %v", err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
+}
+
+func (h *HTTPHandler) ModifyPlantHireExtension(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key, err := strconv.ParseInt(vars["id"], 10, 64)
+
+	if err != nil {
+		log.Errorf("Error while parsing id, err %v", err)
+	}
+
+	plantHireExtensionDTO := &domain.PlantHireExtensionDTO{}
+	err1 := json.NewDecoder(r.Body).Decode(plantHireExtensionDTO)
+	defer r.Body.Close()
+
+	if err1 != nil {
+		log.Errorf("Error: %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	mph, _ := h.plantHireService.ModifyPlantHireExtension(key, plantHireExtensionDTO)
+
+	if mph == nil {
+		log.Errorf("Could not modify plant hire", err)
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
+
+	log.Debug(mph.Id)
+	log.Debug(mph)
+	w.WriteHeader(http.StatusCreated)
+
+	err = json.NewEncoder(w).Encode(&mph)
+	if err != nil {
+		log.Errorf("Could not encode json, err %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+
 }
 
 /*

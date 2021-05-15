@@ -42,3 +42,7 @@ type Invoice struct {
 	LastReminderDate time.Time `json:"lastReminderDate"`
 	PaymentStatus    string    `json:"paymentStatus"`
 }
+
+type PlantHireExtensionDTO struct {
+	PlantReturnDate string `json:"plantReturnDate"`
+}

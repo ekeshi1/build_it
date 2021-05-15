@@ -79,9 +79,9 @@ func main() {
 	log.Info("Conneced with db")
 	httpRouter := mux.NewRouter()
 	plantHireRepo := repositories.NewPlantHireRepository(dbConn)
-	plantHireService := services.NewPlantHireService(plantHireRepo)
-	purchaseOrderRepo := repositories.NewPurchaseOrderRepository(dbConn)
 	purchaseOrderDriverService := services.NewPurchaseOrderDriverService()
+	plantHireService := services.NewPlantHireService(plantHireRepo, purchaseOrderDriverService)
+	purchaseOrderRepo := repositories.NewPurchaseOrderRepository(dbConn)
 	purchaseOrderService := services.NewPurchaseOrderService(purchaseOrderRepo, purchaseOrderDriverService)
 
 	httpHandler := http2.NewHTTPHandler(plantHireService, purchaseOrderService, nil)
