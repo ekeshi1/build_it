@@ -45,7 +45,7 @@ values
         
 create table invoices(
     id SERIAL PRIMARY KEY,
-    purchase_order_id INTEGER NOT NULL,
+    purchase_order_id INTEGER NOT NULL UNIQUE,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
     last_reminder_date date,

@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"cs-ut-ee/build-it-project/pkg/internald/domain"
+	"fmt"
 
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
@@ -52,4 +53,35 @@ func (por *PurchaseOrderRepository) GetAllPurchaseOrders() ([]*domain.PurchaseOr
 	}
 	return purchaseOrders, nil
 
+}
+
+func (por *PurchaseOrderRepository) ValidatePurchaseOrderId(id int64) (bool, error) {
+
+	//check if there is a purchase order with this id
+	//and check if it is unpaid
+	var purchaseOrders []*domain.PurchaseOrder
+	if res := por.gormDB.Where(&domain.PurchaseOrder{Id: id}).Not(&domain.PurchaseOrder{Status: domain.InvStatusPaid}).Find(&purchaseOrders); res.Error != nil {
+		log.Errorf("Error retrieving all pos. Error: %v", res.Error)
+		return false, res.Error
+	}
+
+	log.Debugf("Found %v purchase orders with this id !", len(purchaseOrders))
+	log.Debugf("%v", &purchaseOrders)
+	if len(purchaseOrders) != 1 {
+		return false, fmt.Errorf("There should be exactly 1 purchase orders to continue.")
+
+	}
+
+	return true, nil
+
+}
+
+//change this with orm!
+func (por *PurchaseOrderRepository) GetPurchaseOrderById(id int64) (*domain.PurchaseOrder, error) {
+	var purchaseOrder *domain.PurchaseOrder
+	if res := por.gormDB.First(&purchaseOrder, id); res.Error != nil {
+		log.Errorf("Error retrieving all pos. Error: %v", res.Error)
+		return nil, res.Error
+	}
+	return purchaseOrder, nil
 }

@@ -9,4 +9,7 @@ type PlantHireServicePort interface {
 }
 
 type InvoiceServicePort interface {
+	CreateInvoice(inv *domain.Invoice) (*domain.Invoice, error)
+	ApproveInvoice(invoiceId int64) error
+	GetPurchaseOrderByInvoice(invoiceId int64) (*domain.PurchaseOrder, error)
 }

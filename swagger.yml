@@ -98,8 +98,29 @@ paths:
             items: 
               $ref: '#/definitions/PurchaseOrder'
         500:
-          description: "Error"      
-
+          description: "Error"
+  /invoices/{invoiceId}/approve:
+    post:
+      summary: "Approve a submited invoice as a site engineer"
+      produces:
+      - application/json
+      responses:
+        200:
+          description: "OK"
+        500:
+          description: "Error" 
+  /invoices/{invoiceId}/purchase-order:
+    get:
+      summary: "get purchase order related to the invoice"
+      produces: 
+      - application/json
+      responses:
+        200:
+          description: "OK"
+          schema:
+           $ref: '#/definitions/PurchaseOrder'
+        500:
+          description: "Error"   
 
 definitions:
   PlantHireRequest:
