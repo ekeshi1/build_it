@@ -27,15 +27,14 @@ type PlantHire struct {
 }
 
 type PurchaseOrder struct {
-	Id              int64     `json:"id"`
-	PlantHireId     int64     `json:"plantHireId"`
-	Description     string    `json:"description"`
-	CreatedAt       time.Time `json:"createdAt"`
-	UpdatedAt       time.Time `json:"updatedAt"`
-	Creator         string    `json:"creator"`
-	DeliveryAddress string    `json:"deliveryAddress"`
-	DeliveryStatus  string    `json:"deliveryStatus"`
-	Status          string    `json:"status"`
+	Id             int64     `json:"id"`
+	PlantHireId    int64     `json:"plantHireId"`
+	Description    string    `json:"description"`
+	CreatedAt      time.Time `json:"createdAt"`
+	UpdatedAt      time.Time `json:"updatedAt"`
+	Creator        string    `json:"creator"`
+	DeliveryStatus string    `json:"deliveryStatus"`
+	Status         string    `json:"status"`
 }
 
 type Invoice struct {
@@ -45,4 +44,8 @@ type Invoice struct {
 	UpdatedAt       time.Time `json:"updatedDate"`
 	//PaymentDate     time.Time `json:"paymentDate"`
 	PaymentStatus string `json:"paymentStatus"`
+}
+
+type PlantHireExtensionDTO struct {
+	PlantReturnDate string `json:"plantReturnDate"`
 }
