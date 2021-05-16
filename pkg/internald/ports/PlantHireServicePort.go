@@ -14,6 +14,7 @@ type InvoiceServicePort interface {
 	ApproveInvoice(invoiceId int64) error
 	PayInvoice(invoiceId int64) error
 	GetPurchaseOrderByInvoice(invoiceId int64) (*domain.PurchaseOrder, error)
+	GetInvoice(id int64) (*domain.Invoice, error)
 }
 
 //this port is used to drive communication with 3d parties(rent it)

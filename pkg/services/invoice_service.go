@@ -109,3 +109,12 @@ func (s *InvoiceService) PayInvoice(id int64) error {
 
 	return nil
 }
+
+func (s *InvoiceService) GetInvoice(id int64) (*domain.Invoice, error) {
+	inv, err := s.invoiceRepository.GetInvoice(id)
+	if err != nil {
+		log.Errorf("Couldn't get invoice with error: ", err)
+		return nil, err
+	}
+	return inv, nil
+}

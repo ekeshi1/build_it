@@ -47,9 +47,27 @@ func (h *HTTPHandler) RegisterPORoutes(router *mux.Router) {
 }
 
 func (h *HTTPHandler) RegisterInvoiceRoutes(router *mux.Router) {
+	router.HandleFunc("/api/invoices/{id}", h.GetInvoiceById).Methods(http.MethodGet)
 	router.HandleFunc("/api/invoices", h.SubmitInvoice).Methods(http.MethodPost)
 	router.HandleFunc("/api/invoices/{invoiceId}/approve", h.ApproveInvoice).Methods(http.MethodPost)
 	router.HandleFunc("/api/invoices/{invoiceId}/purchase-order", h.GetInvoicePo).Methods(http.MethodGet)
+}
+
+func (h *HTTPHandler) GetInvoiceById(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key, err := strconv.ParseInt(vars["id"], 10, 64)
+	plants, err := h.invoiceService.GetInvoice(key)
+	if err != nil {
+		log.Error(err.Error())
+		http.Error(w, "Invoice with this id does not exist", http.StatusNotFound)
+		return
+	}
+	// write success response
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(&plants)
+	if err != nil {
+		log.Errorf("Could not encode json, err %v", err)
+	}
 }
 
 func (h *HTTPHandler) GetInvoicePo(w http.ResponseWriter, r *http.Request) {
@@ -95,6 +113,12 @@ func (h *HTTPHandler) ApproveInvoice(w http.ResponseWriter, r *http.Request) {
 	if err1 != nil {
 		http.Error(w, err1.Error(), http.StatusInternalServerError)
 		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode("Invoice is approved, paid and the third party is informed.")
+	if err != nil {
+		log.Errorf("Could not encode json, err %v", err)
 	}
 }
 
