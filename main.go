@@ -95,6 +95,7 @@ func main() {
 		Addr:    fmt.Sprintf(":%d", httpServicePort),
 		Handler: httpRouter,
 	}
+	log.Infof("Starting server at port ", httpServicePort)
 	err = httpSrv.ListenAndServe()
 	if err != nil {
 		log.Fatalf("Could not start server")
