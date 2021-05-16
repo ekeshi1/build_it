@@ -4,7 +4,7 @@ FROM golang:1.15.6 as builder
 WORKDIR /app
 COPY . .    
 #RUN go mod download
-RUN go build -o build_it
+RUN go build -o build-it
 EXPOSE 8080
 
-ENTRYPOINT ["/app/build_it"]
+ENTRYPOINT ["/app/build-it"]
