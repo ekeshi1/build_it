@@ -167,6 +167,27 @@ func TestModifyPlantHireExtension(t *testing.T) {
 
 }
 
+//CC9
+func TestSubmitInvoice(t *testing.T) {
+	url1 := "http://localhost:8081/api/invoices"
+
+	var jsonStr = []byte(`{"PurchaseOrderId":14, "PaymentStatus":"CREATED"}`)
+	req, _ := http.NewRequest("POST", url1, bytes.NewBuffer(jsonStr))
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	if resp.Status != "200 OK" {
+		t.Error("Could not create invoice with this id")
+		return
+	}
+
+}
+
 //CC11-CC12
 func TestApproveInvoice(t *testing.T) {
 	url1 := "http://localhost:8081/api/invoices/1/approve"
