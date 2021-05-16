@@ -171,17 +171,29 @@ func TestModifyPlantHireExtension(t *testing.T) {
 func TestSubmitInvoice(t *testing.T) {
 	url1 := "http://localhost:8081/api/invoices"
 
-	var jsonStr = []byte(`{"PurchaseOrderId":14, "PaymentStatus":"CREATED"}`)
-	req, _ := http.NewRequest("POST", url1, bytes.NewBuffer(jsonStr))
+	url2 := "http://localhost:8081/api/plant-hires/2/status"
 
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		panic(err)
+	var jsonStr1 = []byte(`[{"op": "replace", "path": "/status","value": "APPROVED"}]`)
+	req1, _ := http.NewRequest("PATCH", url2, bytes.NewBuffer(jsonStr1))
+
+	client1 := &http.Client{}
+	resp1, err1 := client1.Do(req1)
+	if err1 != nil {
+		panic(err1)
 	}
-	defer resp.Body.Close()
+	defer resp1.Body.Close()
 
-	if resp.Status != "200 OK" {
+	var jsonStr2 = []byte(`{"PurchaseOrderId":4, "PaymentStatus":"CREATED"}`)
+	req2, _ := http.NewRequest("POST", url1, bytes.NewBuffer(jsonStr2))
+
+	client2 := &http.Client{}
+	resp2, err2 := client2.Do(req2)
+	if err2 != nil {
+		panic(err2)
+	}
+	defer resp2.Body.Close()
+
+	if resp2.Status != "200 OK" {
 		t.Error("Could not create invoice with this id")
 		return
 	}
