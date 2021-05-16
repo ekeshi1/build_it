@@ -31,6 +31,8 @@ create table purchase_orders(
     delivery_status varchar NOT NULL,
     status varchar NOT NULL,
 
+
+
     CONSTRAINT fk_plant
       FOREIGN KEY(plant_hire_id) 
 	  REFERENCES plant_hires(id)
