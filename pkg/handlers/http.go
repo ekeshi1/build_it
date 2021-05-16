@@ -37,10 +37,98 @@ func (h *HTTPHandler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/api/plant-hires/{id}", h.ModifyPlantHireDates).Methods(http.MethodPatch)
 	router.HandleFunc("/api/plant-hires/{id}", h.GetPlantHireById).Methods(http.MethodGet)
 	router.HandleFunc("/api/plant-hires/{id}/status", h.ModifyPlantHireStatus).Methods(http.MethodPatch)
-	//router.HandleFunc("/api/plant-hires/{id}/purchase-order", h.createPO).Methods(http.MethodPost)
+  //router.HandleFunc("/api/plant-hires/{id}/purchase-order", h.createPO).Methods(http.MethodPost)
 	router.HandleFunc("/api/plant-hires/{id}/extension", h.ModifyPlantHireExtension).Methods(http.MethodPut)
+
 }
 
+func (h *HTTPHandler) RegisterPORoutes(router *mux.Router) {
+	router.HandleFunc("/api/purchase-orders", h.GetAllPurchaseOrders).Methods(http.MethodGet)
+}
+
+func (h *HTTPHandler) RegisterInvoiceRoutes(router *mux.Router) {
+	router.HandleFunc("/api/invoices", h.SubmitInvoice).Methods(http.MethodPost)
+	router.HandleFunc("/api/invoices/{invoiceId}/approve", h.ApproveInvoice).Methods(http.MethodPost)
+	router.HandleFunc("/api/invoices/{invoiceId}/purchase-order", h.GetInvoicePo).Methods(http.MethodGet)
+}
+
+func (h *HTTPHandler) GetInvoicePo(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	invoiceId, err := strconv.ParseInt(vars["invoiceId"], 10, 64)
+
+	if err != nil {
+		http.Error(w, "Bad URL", http.StatusBadRequest)
+		return
+	}
+
+	po, err := h.invoiceService.GetPurchaseOrderByInvoice(invoiceId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// write success response
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(&po)
+	if err != nil {
+		log.Errorf("Could not encode json, err %v", err)
+	}
+}
+
+func (h *HTTPHandler) ApproveInvoice(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	invoiceId, err := strconv.ParseInt(vars["invoiceId"], 10, 64)
+	if err != nil {
+		http.Error(w, "Bad URL", http.StatusBadRequest)
+		return
+	}
+	err = h.invoiceService.ApproveInvoice(invoiceId)
+
+	log.Error(err)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+}
+
+func (h *HTTPHandler) SubmitInvoice(w http.ResponseWriter, r *http.Request) {
+	var inv domain.Invoice
+	err := json.NewDecoder(r.Body).Decode(&inv)
+	log.Info(inv)
+	defer r.Body.Close()
+	if err != nil {
+		log.Errorf("Error: %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	createdInvoice, err := h.invoiceService.CreateInvoice(&inv)
+
+	if createdInvoice == nil || err != nil {
+		log.Errorf("Could not create invoice", err)
+		http.Error(w, "", http.StatusBadRequest)
+		return
+	}
+}
+
+func (h *HTTPHandler) GetAllPurchaseOrders(w http.ResponseWriter, r *http.Request) {
+
+	pos, err := h.purchaseOrderService.GetAllPurchaseOrders()
+
+	if err != nil {
+		log.Error(err.Error())
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// write success response
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(&pos)
+	if err != nil {
+		log.Errorf("Could not encode json, err %v", err)
+	}
+}
 func (h *HTTPHandler) createPO(w http.ResponseWriter, r *http.Request) {
 	var poReq domain.PurchaseOrder
 	err := json.NewDecoder(r.Body).Decode(&poReq)

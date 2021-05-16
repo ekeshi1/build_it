@@ -83,9 +83,13 @@ func main() {
 	plantHireService := services.NewPlantHireService(plantHireRepo, purchaseOrderDriverService)
 	purchaseOrderRepo := repositories.NewPurchaseOrderRepository(dbConn)
 	purchaseOrderService := services.NewPurchaseOrderService(purchaseOrderRepo, purchaseOrderDriverService)
+  invoiceRepo := repositories.NewInvoiceRepository(dbConn)
+	invoiceService := services.NewInvoiceService(invoiceRepo, purchaseOrderRepo)
 
-	httpHandler := http2.NewHTTPHandler(plantHireService, purchaseOrderService, nil)
+	httpHandler := http2.NewHTTPHandler(plantHireService, purchaseOrderService, invoiceService)
 	httpHandler.RegisterRoutes(httpRouter)
+	httpHandler.RegisterPORoutes(httpRouter)
+	httpHandler.RegisterInvoiceRoutes(httpRouter)
 	httpSrv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", httpServicePort),
 		Handler: httpRouter,

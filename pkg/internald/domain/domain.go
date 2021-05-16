@@ -7,6 +7,9 @@ const (
 	POStatusSent              = "SENT"
 	PODeliveryStatusCreated   = "CREATED"
 	PODeliveryStatusDelivered = "DELIVERED"
+	InvStatusPaid             = "PAID"
+	InvStatusCreated          = "CREATED"
+	InvStatusApproved         = "APPROVED"
 )
 
 type PlantHire struct {
@@ -35,12 +38,12 @@ type PurchaseOrder struct {
 }
 
 type Invoice struct {
-	Id               int64     `json:"id"`
-	PurchaseOrderId  int64     `json:"purchaseOrderId"`
-	CreatedAt        time.Time `json:"createdDate"`
-	UpdatedAt        time.Time `json:"updatedDate"`
-	LastReminderDate time.Time `json:"lastReminderDate"`
-	PaymentStatus    string    `json:"paymentStatus"`
+	Id              int64     `json:"id"`
+	PurchaseOrderId int64     `json:"purchaseOrderId"`
+	CreatedAt       time.Time `json:"createdDate"`
+	UpdatedAt       time.Time `json:"updatedDate"`
+	//PaymentDate     time.Time `json:"paymentDate"`
+	PaymentStatus string `json:"paymentStatus"`
 }
 
 type PlantHireExtensionDTO struct {
