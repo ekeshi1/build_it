@@ -7,6 +7,7 @@ type PlantHireRepositoryPort interface {
 	CreatePlantHire(po *domain.PlantHire) (*domain.PlantHire, error)
 	ModifyPlantHire(plantHire *domain.PlantHire, modifiedPlantHire *domain.PlantHire) (*domain.PlantHire, error)
 	GetPlantHireById(id int64) (*domain.PlantHire, error)
+	CalculatePrice(start string, end string, pricePerDay float64) (float64, error)
 }
 
 type PurchaseOrderRepositoryPort interface {

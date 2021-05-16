@@ -25,12 +25,17 @@ func NewPlantHireService(phr ports.PlantHireRepositoryPort, poDriver ports.Purch
 }
 
 func (s *PlantHireService) CreatePlantHire(ph *domain.PlantHire) (*domain.PlantHire, error) {
-
-	createdPlantHire, err := s.plantHireRepository.CreatePlantHire(ph)
-
+	totalPrice, err := s.plantHireRepository.CalculatePrice(ph.PlantArrivalDate, ph.PlantReturnDate, 127.00)
+	ph.PlantTotalPrice = totalPrice
 	if err != nil {
 		log.Errorf("Couldn't create new plant with error: ", err)
 		return nil, err
+	}
+	createdPlantHire, err1 := s.plantHireRepository.CreatePlantHire(ph)
+
+	if err1 != nil {
+		log.Errorf("Couldn't create new plant with error: ", err1)
+		return nil, err1
 	}
 
 	log.Debugf("Created plant with id : ", createdPlantHire.Id)
@@ -98,6 +103,17 @@ func (s *PlantHireService) ModifyPlantHireExtension(id int64, p *domain.PlantHir
 	var modifiedPlantHire *domain.PlantHire
 	modifiedPlantHire = plantHire
 	modifiedPlantHire.PlantReturnDate = p.PlantReturnDate
+	fmt.Println(plantHire.PlantArrivalDate)
+	fmt.Println(p.PlantReturnDate)
+	totalPrice, err := s.plantHireRepository.CalculatePrice(plantHire.PlantArrivalDate, p.PlantReturnDate, 127.00)
+	plantHire.PlantTotalPrice = totalPrice
+	fmt.Println(totalPrice)
+	fmt.Println(plantHire)
+	fmt.Println(modifiedPlantHire)
+	if err != nil {
+		log.Errorf("Couldn't create new plant with error: ", err)
+		return nil, err
+	}
 
 	mph, err1 := s.plantHireRepository.ModifyPlantHire(plantHire, modifiedPlantHire)
 	if err1 != nil {
