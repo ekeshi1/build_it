@@ -22,8 +22,8 @@ type PlantHire struct {
 	SiteEngineerId     int64     `json:"siteEngineerId"`
 	PlantArrivalDate   string    `json:"plantArrivalDate"`
 	PlantReturnDate    string    `json:"plantReturnDate"`
-	PlantDailyPrice    float64   `json:"plantDailyPrice"`
 	PlantTotalPrice    float64   `json:"plantTotalPrice"`
+	PlantDailyPrice    float64   `json:"plantDailyPrice"`
 	CreatedAt          time.Time `json:"createdAt"`
 	UpdatedAt          time.Time `json:"updatedAt"`
 	Status             string    `json:"status"`
