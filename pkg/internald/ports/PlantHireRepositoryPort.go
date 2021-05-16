@@ -16,6 +16,7 @@ type PurchaseOrderRepositoryPort interface {
 	GetAllPurchaseOrders() ([]*domain.PurchaseOrder, error)
 	ValidatePurchaseOrderId(id int64) (bool, error)
 	GetPurchaseOrderById(id int64) (*domain.PurchaseOrder, error)
+	GetPurchaseOrderByPlantHireId(id int64) (*domain.PurchaseOrder, error)
 }
 
 type InvoiceRepositoryPort interface {
