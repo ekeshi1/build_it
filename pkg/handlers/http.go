@@ -44,6 +44,7 @@ func (h *HTTPHandler) RegisterRoutes(router *mux.Router) {
 
 func (h *HTTPHandler) RegisterPORoutes(router *mux.Router) {
 	router.HandleFunc("/api/purchase-orders", h.GetAllPurchaseOrders).Methods(http.MethodGet)
+	router.HandleFunc("/api/purchase-orders/{id}", h.GetPurchaseOrderByPlantHireId).Methods(http.MethodGet)
 }
 
 func (h *HTTPHandler) RegisterInvoiceRoutes(router *mux.Router) {
@@ -357,6 +358,23 @@ func (h *HTTPHandler) ModifyPlantHireExtension(w http.ResponseWriter, r *http.Re
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 
+}
+
+func (h *HTTPHandler) GetPurchaseOrderByPlantHireId(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key, err := strconv.ParseInt(vars["id"], 10, 64)
+	plants, err := h.purchaseOrderService.GetPurchaseOrderByPlantHireId(key)
+	if err != nil {
+		log.Error(err.Error())
+		http.Error(w, "Purchase order with this plant hire id does not exist", http.StatusNotFound)
+		return
+	}
+	// write success response
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(&plants)
+	if err != nil {
+		log.Errorf("Could not encode json, err %v", err)
+	}
 }
 
 /*

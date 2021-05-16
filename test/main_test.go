@@ -86,8 +86,8 @@ func TestModifyPlantHireStatus(t *testing.T) {
 }
 
 func TestModifyPlantHireExtension(t *testing.T) {
-	url1 := "http://localhost:8081/api/plant-hires/1/extension"
-	url2 := "http://localhost:8081/api/plant-hires/1"
+	url1 := "http://localhost:8081/api/plant-hires/2/extension"
+	url2 := "http://localhost:8081/api/plant-hires/2"
 
 	var jsonStr = []byte(`{"PlantReturnDate":"2021-06-06T00:00:00Z"}`)
 	req, _ := http.NewRequest("PUT", url1, bytes.NewBuffer(jsonStr))
@@ -99,7 +99,7 @@ func TestModifyPlantHireExtension(t *testing.T) {
 	}
 	defer resp.Body.Close()
 
-	//fmt.Println(req)
+	//fmt.Println(resp.Body)
 	resp1, err1 := http.Get(url2)
 	if err1 != nil {
 		t.Error("Problem getting single plant hire via REST.")
@@ -109,7 +109,44 @@ func TestModifyPlantHireExtension(t *testing.T) {
 	plantHireJSON, _ := ioutil.ReadAll(resp1.Body)
 	var plantHire *domain.PlantHire
 	json.Unmarshal(plantHireJSON, &plantHire)
+	//fmt.Println(plantHire)
 	if plantHire.PlantReturnDate != "2021-06-06T00:00:00Z" {
+		t.Error("Couldn't match with updated PlantReturnDate")
+		return
+	}
+
+	if resp1.Status != "200 OK" {
+		t.Error("Could not get plant hire with this id")
+		return
+	}
+
+}
+
+func TestApproveInvoice(t *testing.T) {
+	url1 := "http://localhost:8081/api/invoices/1/approve"
+	url2 := "http://localhost:8081/api/invoices/1"
+
+	var jsonStr = []byte(`{}`)
+	req, _ := http.NewRequest("POST", url1, bytes.NewBuffer(jsonStr))
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	//fmt.Println(req)
+	resp1, err1 := http.Get(url2)
+	if err1 != nil {
+		t.Error("Problem getting single invoice via REST.")
+		return
+	}
+
+	pinvoiceJSON, _ := ioutil.ReadAll(resp1.Body)
+	var invoice *domain.Invoice
+	json.Unmarshal(pinvoiceJSON, &invoice)
+	if invoice.PaymentStatus != "PAID" {
 		t.Error("Couldn't match with updated PlantReturnDate")
 		return
 	}

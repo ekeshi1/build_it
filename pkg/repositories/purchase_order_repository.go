@@ -85,3 +85,13 @@ func (por *PurchaseOrderRepository) GetPurchaseOrderById(id int64) (*domain.Purc
 	}
 	return purchaseOrder, nil
 }
+
+func (por *PurchaseOrderRepository) GetPurchaseOrderByPlantHireId(id int64) (*domain.PurchaseOrder, error) {
+	var po *domain.PurchaseOrder
+	if res := por.gormDB.First(&po, domain.PurchaseOrder{PlantHireId: id}); res.Error != nil {
+		log.Errorf("Couldn't find purchase order by plant id %d. Error %v", id, res.Error)
+		return nil, res.Error
+	}
+
+	return po, nil
+}

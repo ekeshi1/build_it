@@ -63,3 +63,12 @@ func (pos *PurchaseOrderService) GetAllPurchaseOrders() ([]*domain.PurchaseOrder
 	return pOrders, nil
 
 }
+
+func (pos *PurchaseOrderService) GetPurchaseOrderByPlantHireId(id int64) (*domain.PurchaseOrder, error) {
+	po, err := pos.purchaseOrderRepository.GetPurchaseOrderByPlantHireId(id)
+	if err != nil {
+		log.Errorf("Couldn't get purchase order with error: ", err)
+		return nil, err
+	}
+	return po, nil
+}

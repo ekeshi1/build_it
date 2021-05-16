@@ -6,6 +6,7 @@ import "cs-ut-ee/build-it-project/pkg/internald/domain"
 type PurchaseOrderServicePort interface {
 	CreatePurchaseOrder(po *domain.PurchaseOrder) (*domain.PurchaseOrder, error)
 	GetAllPurchaseOrders() ([]*domain.PurchaseOrder, error)
+	GetPurchaseOrderByPlantHireId(id int64) (*domain.PurchaseOrder, error)
 }
 
 //this port is used to drive communication with 3d parties(rent it)
