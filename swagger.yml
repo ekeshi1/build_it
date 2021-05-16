@@ -99,6 +99,23 @@ paths:
           description: "Bad Request - 'It is now allowed to update this data', 'The value of status should be uppercase', The value is not correct, 'Could not create po but status updated' or 'Could not encode json, err'"
         404:
           description: "Not found - 'Plant with this id does not exist'"
+  /plant-hires/{id}/extension:
+    put:
+      summary: "Try to extend a Plant Hire as a site engineer."
+      produces: 
+        - application/json
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true  
+      responses:
+        200:
+          description: "Successfull"
+          schema:
+            $ref: "#/definitions/PlantHireResponse"
+        400:
+          description: "Bad Request - 'Error while parsing id, err', 'Could not modify plant hire' or 'Could not encode json, err'"
   /plant-hires/{id}/cancelation:
     post:
       summary: "Try to cancel a Plant Hire as a site engineer."
