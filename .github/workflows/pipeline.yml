@@ -4,7 +4,7 @@ on:
   push
 env:
   # ⬇️ EDIT with your registry and registry path.
-  REGISTRY: docker.io/ekeshi/
+  REGISTRY: docker.io/ekeshi
   # ⬇️ EDIT with your registry username.
   REGISTRY_USER: ekeshi
   REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
@@ -19,7 +19,7 @@ env:
   APP_PORT: "8081"
 
   # ⬇️ EDIT if you wish to set the kube context's namespace after login. Leave blank to use the default namespace.
-  OPENSHIFT_NAMESPACE: "erkesh-stage"
+  OPENSHIFT_NAMESPACE: ""
 
   # If you wish to manually provide the APP_NAME and TAG, set them here, otherwise they will be auto-detected.
   APP_NAME: ""
