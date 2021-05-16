@@ -7,14 +7,13 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
-
-	log "github.com/sirupsen/logrus"
 )
 
 var (
 	HTTP_URL_CREATE_PH = "http://localhost:8081/api/plant-hires"
 )
 
+//CC1
 func TestCreatePlantHire(t *testing.T) {
 	a := `{
 		"plantId": 22602061,
@@ -37,7 +36,7 @@ func TestCreatePlantHire(t *testing.T) {
 	plantHireJSON, _ := ioutil.ReadAll(resp.Body)
 	var plantHire *domain.PlantHire
 	json.Unmarshal(plantHireJSON, &plantHire)
-	log.Info(plantHire)
+	//log.Info(plantHire)
 	if plantHire.Id == 0 {
 		t.Error("Problem creating plant hire.")
 		return

@@ -7,8 +7,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
-
-	log "github.com/sirupsen/logrus"
 )
 
 var (
@@ -16,6 +14,7 @@ var (
 	HTTP_URL_GET_PH = "http://localhost:8081/api/plant-hires/"
 )
 
+//CC13
 func TestUniqueFeatureAutoApproval(t *testing.T) {
 
 	a := `{
@@ -39,7 +38,7 @@ func TestUniqueFeatureAutoApproval(t *testing.T) {
 	plantHireJSON, _ := ioutil.ReadAll(resp.Body)
 	var plantHire *domain.PlantHire
 	json.Unmarshal(plantHireJSON, &plantHire)
-	log.Info(plantHire)
+	//log.Info(plantHire)
 	if plantHire.Id == 0 {
 		t.Error("Problem creating plant hire.")
 		return

@@ -114,6 +114,21 @@ func TestCreatePO(t *testing.T) {
 	}
 }
 
+//CC7
+func TestGetAllPurchaseOrders(t *testing.T) {
+	url := "http://localhost:8081/api/purchase-orders"
+
+	resp, err := http.Get(url)
+	if err != nil {
+		t.Error("Problem getting purchase orders hire via REST.")
+		return
+	}
+	if resp.Status != "200 OK" {
+		t.Error("Could not get purchase orders ")
+		return
+	}
+}
+
 //CC8
 func TestModifyPlantHireExtension(t *testing.T) {
 	url1 := "http://localhost:8081/api/plant-hires/2/extension"
