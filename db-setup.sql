@@ -15,7 +15,7 @@ create table plant_hires
 );
 
 insert into plant_hires
-        (plant_id,construction_site_id,supplier_id,site_engineer_id,plant_arrival_date,plant_return_date, plant_daily_price, plant_total_price, status)
+        (plant_id,construction_site_id,supplier_id,site_engineer_id,plant_arrival_date,plant_return_date, plant_total_price, plant_daily_price, status)
 values  
 	(1,1,2,2,'2021-05-18','2021-05-20',123.5,12.5,'CREATED'),
         (2,3,1,1,'2021-05-19','2021-05-21',61.5, 20.5,'CREATED'),
