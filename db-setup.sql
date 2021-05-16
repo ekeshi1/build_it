@@ -27,7 +27,6 @@ create table purchase_orders(
     created_at timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     creator varchar NOT NULL,
-    delivery_address varchar NOT NULL,
     delivery_status varchar NOT NULL,
     status varchar NOT NULL,
 
@@ -37,11 +36,11 @@ create table purchase_orders(
 );
 
 insert into purchase_orders
-        (plant_hire_id,description,creator,delivery_address, delivery_status,status)
+        (plant_hire_id,description,creator, delivery_status,status)
 values  
-	(1,'just a description1','BUILD_IT','Address1','CREATED','CREATED'),
-        (2,'just a description2','BUILD_IT','Address2','CREATED','CREATED'),
-        (3,'just a description3','BUILD_IT','Address3','CREATED','CREATED');
+	(1,'just a description1','BUILD_IT','CREATED','CREATED'),
+        (2,'just a description2','BUILD_IT','CREATED','CREATED'),
+        (3,'just a description3','BUILD_IT','CREATED','CREATED');
         
 create table invoices(
     id SERIAL PRIMARY KEY,

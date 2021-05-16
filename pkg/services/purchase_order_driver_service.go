@@ -42,3 +42,9 @@ func (pos *PurchaseOrderDriverService) CreatePurchaseOrder(po *domain.PurchaseOr
 	return true, nil
 
 }
+
+func (pos *PurchaseOrderDriverService) ModifyPurchaseOrder(po *domain.PurchaseOrder) (bool, error) {
+
+	return true, nil
+
+}

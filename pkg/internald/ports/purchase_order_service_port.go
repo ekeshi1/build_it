@@ -11,4 +11,5 @@ type PurchaseOrderServicePort interface {
 //this port is used to drive communication with 3d parties(rent it)
 type PurchaseOrderServiceDriverPort interface {
 	CreatePurchaseOrder(po *domain.PurchaseOrder) (bool, error)
+	ModifyPurchaseOrder(po *domain.PurchaseOrder) (bool, error)
 }
