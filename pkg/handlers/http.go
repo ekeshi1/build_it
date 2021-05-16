@@ -37,7 +37,7 @@ func (h *HTTPHandler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/api/plant-hires/{id}", h.ModifyPlantHireDates).Methods(http.MethodPatch)
 	router.HandleFunc("/api/plant-hires/{id}", h.GetPlantHireById).Methods(http.MethodGet)
 	router.HandleFunc("/api/plant-hires/{id}/status", h.ModifyPlantHireStatus).Methods(http.MethodPatch)
-  //router.HandleFunc("/api/plant-hires/{id}/purchase-order", h.createPO).Methods(http.MethodPost)
+	//router.HandleFunc("/api/plant-hires/{id}/purchase-order", h.createPO).Methods(http.MethodPost)
 	router.HandleFunc("/api/plant-hires/{id}/extension", h.ModifyPlantHireExtension).Methods(http.MethodPut)
 
 }
@@ -91,6 +91,11 @@ func (h *HTTPHandler) ApproveInvoice(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err1 := h.invoiceService.PayInvoice(invoiceId)
+	if err1 != nil {
+		http.Error(w, err1.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (h *HTTPHandler) SubmitInvoice(w http.ResponseWriter, r *http.Request) {

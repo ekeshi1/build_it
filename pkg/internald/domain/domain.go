@@ -49,3 +49,10 @@ type Invoice struct {
 type PlantHireExtensionDTO struct {
 	PlantReturnDate string `json:"plantReturnDate"`
 }
+
+type RemittanceAdviceDTO struct {
+	CompanyName   string    `json:"companyName"`
+	InvoiceNumber int64     `json:"invoiceNumber"`
+	PaymentDate   time.Time `json:"paymentDate"`
+	Amount        float64   `json:"amount"`
+}

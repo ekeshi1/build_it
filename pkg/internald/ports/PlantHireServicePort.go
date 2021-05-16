@@ -12,5 +12,11 @@ type PlantHireServicePort interface {
 type InvoiceServicePort interface {
 	CreateInvoice(inv *domain.Invoice) (*domain.Invoice, error)
 	ApproveInvoice(invoiceId int64) error
+	PayInvoice(invoiceId int64) error
 	GetPurchaseOrderByInvoice(invoiceId int64) (*domain.PurchaseOrder, error)
+}
+
+//this port is used to drive communication with 3d parties(rent it)
+type InvoiceServiceDriverPort interface {
+	RemittanceAdvice(ra *domain.RemittanceAdviceDTO) (bool, error)
 }

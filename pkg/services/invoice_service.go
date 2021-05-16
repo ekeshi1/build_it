@@ -11,12 +11,14 @@ import (
 type InvoiceService struct {
 	invoiceRepository       ports.InvoiceRepositoryPort
 	purchaseOrderRepository ports.PurchaseOrderRepositoryPort
+	invoiceDriverPort       ports.InvoiceServiceDriverPort
 }
 
-func NewInvoiceService(ir ports.InvoiceRepositoryPort, por ports.PurchaseOrderRepositoryPort) *InvoiceService {
+func NewInvoiceService(ir ports.InvoiceRepositoryPort, por ports.PurchaseOrderRepositoryPort, iDriver ports.InvoiceServiceDriverPort) *InvoiceService {
 	return &InvoiceService{
 		invoiceRepository:       ir,
 		purchaseOrderRepository: por,
+		invoiceDriverPort:       iDriver,
 	}
 }
 
@@ -78,4 +80,32 @@ func (s *InvoiceService) GetPurchaseOrderByInvoice(id int64) (*domain.PurchaseOr
 	}
 
 	return po, nil
+}
+
+func (s *InvoiceService) PayInvoice(id int64) error {
+	//here may need to check if status is not paid
+	inv, err := s.invoiceRepository.GetInvoice(id)
+
+	if err != nil {
+		return err
+	}
+	if inv.PaymentStatus != domain.InvStatusApproved {
+		return fmt.Errorf("Can't approve this invoice in this status")
+	}
+
+	if err = s.invoiceRepository.UpdateStatus(id, domain.InvStatusPaid); err != nil {
+		return err
+	}
+
+	var remittanceAdvice *domain.RemittanceAdviceDTO
+	// remittanceAdvice.CompanyName = "BuildIT"
+	// remittanceAdvice.InvoiceNumber = inv.Id
+	// remittanceAdvice.PaymentDate = time.Now()
+	// remittanceAdvice.Amount = 24.54
+	if isSuccessfull, err := s.invoiceDriverPort.RemittanceAdvice(remittanceAdvice); err != nil || isSuccessfull != true {
+		log.Error("Something went wrong notifying third party about po. Error %v", err)
+		return err
+	}
+
+	return nil
 }
