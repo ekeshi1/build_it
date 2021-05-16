@@ -202,6 +202,8 @@ definitions:
         description: "Date when the site engineer no longer needs the plant"
       plantTotalPrice:
         type: number
+      plantDailyPrice:
+        type: number
       status:
         type: string
       createdAt:

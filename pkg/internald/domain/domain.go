@@ -10,6 +10,8 @@ const (
 	InvStatusPaid             = "PAID"
 	InvStatusCreated          = "CREATED"
 	InvStatusApproved         = "APPROVED"
+	PHApproved                = "APPROVED"
+	PHCreated                 = "CREATED"
 )
 
 type PlantHire struct {
@@ -20,6 +22,7 @@ type PlantHire struct {
 	SiteEngineerId     int64     `json:"siteEngineerId"`
 	PlantArrivalDate   string    `json:"plantArrivalDate"`
 	PlantReturnDate    string    `json:"plantReturnDate"`
+	PlantDailyPrice    float64   `json:"plantDailyPrice"`
 	PlantTotalPrice    float64   `json:"plantTotalPrice"`
 	CreatedAt          time.Time `json:"createdAt"`
 	UpdatedAt          time.Time `json:"updatedAt"`

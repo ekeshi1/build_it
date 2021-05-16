@@ -8,6 +8,7 @@ create table plant_hires
     plant_arrival_date date  NOT NULL,
     plant_return_date date  NOT NULL,
     plant_total_price FLOAT NOT NULL,
+    plant_daily_price FLOAT NOT NULL,
     created_at timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR NOT NULL

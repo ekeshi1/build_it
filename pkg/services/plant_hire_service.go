@@ -25,12 +25,19 @@ func NewPlantHireService(phr ports.PlantHireRepositoryPort, poDriver ports.Purch
 }
 
 func (s *PlantHireService) CreatePlantHire(ph *domain.PlantHire) (*domain.PlantHire, error) {
-	totalPrice, err := s.plantHireRepository.CalculatePrice(ph.PlantArrivalDate, ph.PlantReturnDate, 127.00)
-	ph.PlantTotalPrice = totalPrice
+	totalPrice, err := s.plantHireRepository.CalculatePrice(ph.PlantArrivalDate, ph.PlantReturnDate, ph.PlantDailyPrice)
 	if err != nil {
 		log.Errorf("Couldn't create new plant with error: ", err)
 		return nil, err
 	}
+	log.Info(totalPrice)
+	ph.PlantTotalPrice = totalPrice
+	if totalPrice < 100 {
+		ph.Status = domain.PHApproved
+	} else {
+		ph.Status = domain.PHCreated
+	}
+
 	createdPlantHire, err1 := s.plantHireRepository.CreatePlantHire(ph)
 
 	if err1 != nil {
