@@ -47,10 +47,6 @@ jobs:
     #  - name : External Testing
     #    run: go test ./...
 
-
-
-
-
   openshift-ci-cd:
     name: Build and deploy to OpenShift
     runs-on: ubuntu-18.04
@@ -164,4 +160,4 @@ jobs:
         echo "Your app can be taken down with: \"oc delete all --selector='${{ env.SELECTOR }}'\""
       env:
         ROUTE: ${{ steps.deploy-and-expose.outputs.route }}
-        SELECTOR: ${{ steps.deploy-and-expose.outputs.selector }}
+        SELECTOR: ${{ steps.deploy-and-expose.outputs.selector }} 
