@@ -4,7 +4,7 @@ on:
   push
 env:
   # ⬇️ EDIT with your registry and registry path.
-  REGISTRY: docker.io/<ekeshi/build_it>
+  REGISTRY: docker.io/ekeshi/build_it
   # ⬇️ EDIT with your registry username.
   REGISTRY_USER: ekeshi
   REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
