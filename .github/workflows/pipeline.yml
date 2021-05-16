@@ -1,4 +1,4 @@
-name: Lint Check
+name: Cicd
 
 on:
   push
@@ -26,18 +26,18 @@ env:
   TAG: ""
 
 jobs:
-  pipeline:
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
-        with:
-          stable: 'false'
-          go-version: "1.14.1"
+  #pipeline:
+  #  runs-on: ubuntu-18.04
+  #  steps:
+  #    - uses: actions/checkout@v2
+  #    - uses: actions/setup-go@v2
+  #      with:
+  #        stable: 'false'
+  #        go-version: "1.14.1"
 
-      - name: Lint Check
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.26.0
+  #    - name: Lint Check
+  #      run: |
+  #        curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.26.0
 
    #   - name: Build
     #    run: |
@@ -49,7 +49,7 @@ jobs:
 
   openshift-ci-cd:
     name: Build and deploy to OpenShift
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-18.04 
     environment: production
 
     outputs:
