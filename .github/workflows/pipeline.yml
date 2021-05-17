@@ -22,7 +22,7 @@ env:
   OPENSHIFT_NAMESPACE: ""
 
   # If you wish to manually provide the APP_NAME and TAG, set them here, otherwise they will be auto-detected.
-  APP_NAME: "buildit2"
+  APP_NAME: "buildit3"
   TAG: ""
 
 jobs:
