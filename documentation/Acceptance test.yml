@@ -16,7 +16,7 @@ tags:
   - name: "Invoice"
     description: "Apis related to Invoice(external)"
 paths:
-  /plant-hire/{id}:
+  /plant-hire/{id}/cancelation:
     post:
       summary: "Cancel plant hire"
       produces: 
@@ -55,7 +55,7 @@ paths:
           description: "Internal server error"
       tags: 
       - PurchaseOrder
-  /purchase-order/{id}:
+  /purchase-order/{id}/extend:
     put:
       summary: "Extend a purchase order"
       produces: 
