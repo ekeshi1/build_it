@@ -14,21 +14,35 @@ import (
 
 type PlantHireService struct {
 	plantHireRepository ports.PlantHireRepositoryPort
+	poDriverPort        ports.PurchaseOrderServiceDriverPort
 }
 
-func NewPlantHireService(phr ports.PlantHireRepositoryPort) *PlantHireService {
+func NewPlantHireService(phr ports.PlantHireRepositoryPort, poDriver ports.PurchaseOrderServiceDriverPort) *PlantHireService {
 	return &PlantHireService{
 		plantHireRepository: phr,
+		poDriverPort:        poDriver,
 	}
 }
 
 func (s *PlantHireService) CreatePlantHire(ph *domain.PlantHire) (*domain.PlantHire, error) {
-
-	createdPlantHire, err := s.plantHireRepository.CreatePlantHire(ph)
-
+	totalPrice, err := s.plantHireRepository.CalculatePrice(ph.PlantArrivalDate, ph.PlantReturnDate, ph.PlantDailyPrice)
 	if err != nil {
 		log.Errorf("Couldn't create new plant with error: ", err)
 		return nil, err
+	}
+	log.Info(totalPrice)
+	ph.PlantTotalPrice = totalPrice
+	if totalPrice < 100 {
+		ph.Status = domain.PHApproved
+	} else {
+		ph.Status = domain.PHCreated
+	}
+
+	createdPlantHire, err1 := s.plantHireRepository.CreatePlantHire(ph)
+
+	if err1 != nil {
+		log.Errorf("Couldn't create new plant with error: ", err1)
+		return nil, err1
 	}
 
 	log.Debugf("Created plant with id : ", createdPlantHire.Id)
@@ -65,6 +79,9 @@ func (s *PlantHireService) ModifyPlantHire(p []byte, id int64) (*domain.PlantHir
 	var modifiedPlantHire *domain.PlantHire
 	json.Unmarshal(modified, &modifiedPlantHire)
 
+	totalPrice, err := s.plantHireRepository.CalculatePrice(modifiedPlantHire.PlantArrivalDate, modifiedPlantHire.PlantReturnDate, modifiedPlantHire.PlantDailyPrice)
+	modifiedPlantHire.PlantTotalPrice = totalPrice
+
 	mph, err1 := s.plantHireRepository.ModifyPlantHire(plantHire, modifiedPlantHire)
 	if err1 != nil {
 		log.Errorf("Couldn't update plant with error: ", err)
@@ -82,4 +99,49 @@ func (s *PlantHireService) GetPlantHireById(id int64) (*domain.PlantHire, error)
 		return nil, err
 	}
 	return plantHire, nil
+}
+
+func (s *PlantHireService) ModifyPlantHireExtension(id int64, p *domain.PlantHireExtensionDTO) (*domain.PlantHire, error) {
+
+	plantHire, err := s.plantHireRepository.GetPlantHireById(id)
+
+	if err != nil {
+		log.Errorf("Couldn't get plant with error: ", err)
+		return nil, err
+	}
+
+	var modifiedPlantHire *domain.PlantHire
+	modifiedPlantHire = plantHire
+	modifiedPlantHire.PlantReturnDate = p.PlantReturnDate
+	fmt.Println(plantHire.PlantArrivalDate)
+	fmt.Println(p.PlantReturnDate)
+	totalPrice, err := s.plantHireRepository.CalculatePrice(plantHire.PlantArrivalDate, p.PlantReturnDate, plantHire.PlantDailyPrice)
+	plantHire.PlantTotalPrice = totalPrice
+	fmt.Println(totalPrice)
+	fmt.Println(plantHire)
+	fmt.Println(modifiedPlantHire)
+	if err != nil {
+		log.Errorf("Couldn't create new plant with error: ", err)
+		return nil, err
+	}
+
+	mph, err1 := s.plantHireRepository.ModifyPlantHire(plantHire, modifiedPlantHire)
+	if err1 != nil {
+		log.Errorf("Couldn't update plant with error: ", err)
+		return nil, err
+	}
+	log.Debugf("Modify plant hire with id : ", modifiedPlantHire.Id)
+
+	log.Debugf("Trying to send modified po to supplier( RENT IT)")
+
+	var modifiedPurchaseOrder *domain.PurchaseOrder
+	//make http request to rent it
+	//this can be changed for another transport layer, only by implementing  PurchaseOrderServiceDriverPort interface.
+	if isSuccessfull, err := s.poDriverPort.ModifyPurchaseOrder(modifiedPurchaseOrder); err != nil || isSuccessfull != true {
+		log.Error("Somethihng went wrong notifying third party about po. Error %v", err)
+		return nil, err
+	}
+
+	log.Debugf("Modified plant with id : ", modifiedPlantHire.Id)
+	return mph, nil
 }

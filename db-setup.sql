@@ -8,17 +8,18 @@ create table plant_hires
     plant_arrival_date date  NOT NULL,
     plant_return_date date  NOT NULL,
     plant_total_price FLOAT NOT NULL,
+    plant_daily_price FLOAT NOT NULL,
     created_at timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR NOT NULL
 );
 
 insert into plant_hires
-        (plant_id,construction_site_id,supplier_id,site_engineer_id,plant_arrival_date,plant_return_date, plant_total_price, status)
+        (plant_id,construction_site_id,supplier_id,site_engineer_id,plant_arrival_date,plant_return_date, plant_total_price, plant_daily_price, status)
 values  
-	(1,1,2,2,'2021-05-18','2021-05-20',123.5,'CREATED'),
-        (2,3,1,1,'2021-05-19','2021-05-21',63.5,'CREATED'),
-        (1,2,3,1,'2021-05-18','2021-05-20',123.5,'CREATED');
+	(1,1,2,2,'2021-05-18','2021-05-20',123.5,12.5,'CREATED'),
+        (2,3,1,1,'2021-05-19','2021-05-21',61.5, 20.5,'CREATED'),
+        (1,2,3,1,'2021-05-18','2021-05-20',123.5, 56.34,'CREATED');
         
 create table purchase_orders(
     id SERIAL PRIMARY KEY,
@@ -27,7 +28,6 @@ create table purchase_orders(
     created_at timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     creator varchar NOT NULL,
-    delivery_address varchar NOT NULL,
     delivery_status varchar NOT NULL,
     status varchar NOT NULL,
 
@@ -37,15 +37,15 @@ create table purchase_orders(
 );
 
 insert into purchase_orders
-        (plant_hire_id,description,creator,delivery_address, delivery_status,status)
+        (plant_hire_id,description,creator, delivery_status,status)
 values  
-	(1,'just a description1','BUILD_IT','Address1','CREATED','CREATED'),
-        (2,'just a description2','BUILD_IT','Address2','CREATED','CREATED'),
-        (3,'just a description3','BUILD_IT','Address3','CREATED','CREATED');
+	(1,'just a description1','BUILD_IT','CREATED','CREATED'),
+        (2,'just a description2','BUILD_IT','CREATED','CREATED'),
+        (3,'just a description3','BUILD_IT','CREATED','CREATED');
         
 create table invoices(
     id SERIAL PRIMARY KEY,
-    purchase_order_id INTEGER NOT NULL,
+    purchase_order_id INTEGER NOT NULL UNIQUE,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
     last_reminder_date date,

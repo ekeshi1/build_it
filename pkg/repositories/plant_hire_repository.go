@@ -2,6 +2,10 @@ package repositories
 
 import (
 	"cs-ut-ee/build-it-project/pkg/internald/domain"
+	"math"
+
+	"fmt"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 	"gorm.io/gorm"
@@ -53,4 +57,25 @@ func (phr *PlantHireRepository) ModifyPlantHire(plantHire *domain.PlantHire, mod
 	}
 
 	return modifiedPlantHire, nil
+}
+
+func (phr *PlantHireRepository) CalculatePrice(start string, end string, pricePerDay float64) (float64, error) {
+	layout := "2006-01-02T15:04:05Z"
+	startDate, err := time.Parse(layout, start)
+
+	endDate, err := time.Parse(layout, end)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	diff := endDate.Sub(startDate)
+
+	if diff < 0 {
+		return 0, fmt.Errorf("End date must be bigger than start date")
+	}
+	diffInDays := math.Ceil(float64(diff/((1e9)*60*60*24))) + 1
+
+	price := diffInDays * pricePerDay
+	return price, nil
 }

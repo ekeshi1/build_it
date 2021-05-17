@@ -1,0 +1,168 @@
+swagger: "2.0"
+consumes: 
+  - application/json
+info:
+  title: BuildIT interaction with RentIT
+  version: 1.0.0
+  description: Documentation for BuildIT interaction with RentIT HTTP interface
+basePath: /api
+schemes:
+- "http"
+tags:
+  - name: "PlantHire"
+    description: "Apis related to PlantHire(external)"
+  - name: "PurchaseOrder"
+    description: "Apis related to PurchaseOrder(external)"
+  - name: "Invoice"
+    description: "Apis related to Invoice(external)"
+paths:
+  /plant-hire/{id}/cancelation:
+    post:
+      summary: "Cancel plant hire"
+      produces: 
+        - application/json
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: "Cancelation is confirmed"
+        "400":
+          description: "Cancelation is rejected"
+        "500":
+          description: "Internal server error"
+      tags: 
+      - PlantHire
+  /purchase-order:
+    post:
+      summary: "Create a purchase order"
+      produces: 
+        - application/json
+      parameters:
+        - name: purchase-order-request
+          in: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/PurchaseOrderRequest'
+      responses:
+        "201":
+          description: "Purchase Order is created and submitted"
+        "400":
+          description: "Purchase Order is rejected"
+        "500":
+          description: "Internal server error"
+      tags: 
+      - PurchaseOrder
+  /purchase-order/{id}/extend:
+    put:
+      summary: "Extend a purchase order"
+      produces: 
+        - application/json
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true 
+        - name: purchase-order-request
+          in: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/PurchaseOrderRequest'
+      responses:
+        "200":
+          description: "Extension is confirmed"
+        "400":
+          description: "Extension is rejected"
+        "500":
+          description: "Internal server error"
+      tags: 
+      - PurchaseOrder
+  /invoices/{id}/remittance:
+    post:
+      summary: "Submit a remittance advice"
+      produces: 
+        - application/json
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true 
+        - name: purchase-order-request
+          in: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/RemittanceAdviceDTO'
+      responses:
+        "201":
+          description: "Successfully submitted"
+        "400":
+          description: "Error occurred during submission"
+        "500":
+          description: "Internal server error"
+      tags: 
+      - Invoice
+  /invoices:
+    post:
+      summary: "Submit an invoice by RENTIT"
+      produces: 
+        - application/json
+      parameters:
+        - name: purchase-order-request
+          in: "body"
+          required: true
+          schema:
+            $ref: '#/definitions/InvoiceSubmissionDto'
+      responses:
+        "201":
+          description: "Successfully submitted"
+        "400":
+          description: "Error occurred during submission"
+        "500":
+          description: "Internal server error"
+      tags: 
+      - Invoice
+
+definitions:
+  PurchaseOrderRequest:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64 
+      plantHireId:
+        type: integer
+        format: int64
+      description: 
+        type: string
+      creator:
+        type: string
+      deliveryStatus:
+        type: string
+      status:
+        type: string
+  RemittanceAdviceDTO:
+    type: object
+    properties:
+      companyName:
+        type: string
+      invoiceNumber:
+        type: integer
+        format: int64 
+      paymentDate:
+        type: string
+        format: date
+        example: 2017-07-21 
+      amount:
+        type: number
+        format: float64
+  InvoiceSubmissionDto:
+    type: object
+    properties:
+      purchaseOrderId:
+        type: integer
+        format: int64 
+      paymentStatus:
+        type: string
+    
