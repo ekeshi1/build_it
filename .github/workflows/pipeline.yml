@@ -40,8 +40,7 @@ jobs:
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.26.0
 
       - name: TESTS
-        run: "docker build -t buildit:1.1 --no-cache . && docker-compose up --no-start && docker-compose run --name buildit --publish 8081:8080 -d buildit  && docker-compose ps && docker-compose run buildit-test && docker-compose down"
-    #    #Testing will probably move from here. It needs to be done after deploying
+        run: "docker build -t buildit:1.1 --no-cache . && docker-compose up --no-start && docker-compose run --name buildit --publish 8081:8080 -d buildit  && docker-compose ps && docker-compose run buildit-test && docker-compose down"    #    #Testing will probably move from here. It needs to be done after deploying
     #  - name : External Testing
     #    run: go test ./...
 
