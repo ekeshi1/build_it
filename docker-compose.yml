@@ -1,4 +1,4 @@
-version: "3"
+version: "2"
 services:
   
   db:
@@ -31,11 +31,20 @@ services:
    # depends_on:
    #   - zookeeper
    # links:
-   #   - zookeeper:zk    
-  rentit:
+   #   - zookeeper:zk   
+  buildit-test:
+    build: 
+      context: .
+      dockerfile: test/Dockerfile
+    command: "go test ./test/create_plant_hire_test.go" 
+    networks: 
+      - local
+  buildit:  
     build: . # uses Dockerfile in root dir to build the image
     ports:
       - "8081:8080"
+    expose:
+      - 8081  
     environment:
       #KAFKA_URL: kafka:9092
       POSTGRES_USER: "postgres"
@@ -46,4 +55,10 @@ services:
     restart: on-failure  
     #depends_on: [postgres,kafka,zookeeper]   
     depends_on: [db]   
+    networks:
+      - local
     #links: [kafka,zookeeper]
+
+networks:
+  local:
+    driver: bridge
