@@ -9,11 +9,32 @@ basePath: /api
 schemes:
 - "http"
 tags:
+  - name: "PlantHire"
+    description: "Apis related to PlantHire(external)"
   - name: "PurchaseOrder"
     description: "Apis related to PurchaseOrder(external)"
   - name: "Invoice"
     description: "Apis related to Invoice(external)"
 paths:
+  /plant-hire/{id}:
+    post:
+      summary: "Cancel plant hire"
+      produces: 
+        - application/json
+      parameters:
+        - name: id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: "Cancelation is confirmed"
+        "400":
+          description: "Cancelation is rejected"
+        "500":
+          description: "Internal server error"
+      tags: 
+      - PlantHire
   /purchase-order:
     post:
       summary: "Create a purchase order"
@@ -145,4 +166,3 @@ definitions:
       paymentStatus:
         type: string
     
- 
