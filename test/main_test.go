@@ -6,5 +6,5 @@ import (
 )
 
 func TestPass(t *testing.T) {
-	fmt.Println("Always passing test")
+	fmt.Println("Passed")
 }
