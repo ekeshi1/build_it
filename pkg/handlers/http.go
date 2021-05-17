@@ -141,6 +141,14 @@ func (h *HTTPHandler) SubmitInvoice(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "", http.StatusBadRequest)
 		return
 	}
+
+	w.WriteHeader(http.StatusCreated)
+
+	err = json.NewEncoder(w).Encode(&createdInvoice)
+	if err != nil {
+		log.Errorf("Could not encode json, err %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
 }
 
 func (h *HTTPHandler) GetAllPurchaseOrders(w http.ResponseWriter, r *http.Request) {
