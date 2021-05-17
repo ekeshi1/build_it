@@ -4,7 +4,7 @@ consumes:
 info:
   title: BuildIT Api Documentation
   version: 1.0.0
-  description: Documentation for BuildIT HTTP interface
+  description: Documentation for BuildIT HTTP interface]  
 basePath: /api
 schemes:
 - "http"
@@ -12,10 +12,10 @@ tags:
   - name: "PlantHire"
     description: "Apis related to PlantHire(internal)"
   - name: "PurchaseOrder"
-    description: "APIS related to Pruchase Order"
+    description: "APIS related to Purchase Order"
   - name: "Invoicing"  
-    description: "APIS related to Pruchase Order"
-
+    description: "APIS related to Invoicing "
+host: buildit2-buildit.95.216.169.123.nip.io
 paths:
   /plant-hires:
     post:
@@ -60,6 +60,8 @@ paths:
           description: "Bad Request - 'It is now allowed to update this data' or 'Could not encode json, err'"
         404:
           description: "Not Found - 'Plant with this id does not exist'"
+      tags: 
+      - PlantHire    
           
     get:
       summary: "Check the status of a plant hire request"
@@ -75,6 +77,8 @@ paths:
             $ref: '#/definitions/PlantHireRequest'
         404:
           description: "Plant with this id does not exist"
+      tags: 
+      - PlantHire    
   /plant-hires/{id}/status:
     patch: 
       summary: "Modify a plant hire request status.(Only Status) The value only should         be APPROVE, MODIFIED or REJECTED"
@@ -99,6 +103,8 @@ paths:
           description: "Bad Request - 'It is now allowed to update this data', 'The value of status should be uppercase', The value is not correct, 'Could not create po but status updated' or 'Could not encode json, err'"
         404:
           description: "Not found - 'Plant with this id does not exist'"
+      tags: 
+      - PlantHire  
   /plant-hires/{id}/extension:
     put:
       summary: "Try to extend a Plant Hire as a site engineer."
@@ -116,6 +122,8 @@ paths:
             $ref: "#/definitions/PlantHireResponse"
         400:
           description: "Bad Request - 'Error while parsing id, err', 'Could not modify plant hire' or 'Could not encode json, err'"
+      tags: 
+      - PlantHire    
   /plant-hires/{id}/cancelation:
     post:
       summary: "Try to cancel a Plant Hire as a site engineer."
@@ -133,6 +141,8 @@ paths:
             $ref: "#/definitions/PlantModificationResponse"
         500:
           description: "Error"        
+      tags: 
+      - PlantHire    
 
   /purchase-orders:
     get:
@@ -148,6 +158,8 @@ paths:
               $ref: '#/definitions/PurchaseOrder'
         500:
           description: "Error"
+      tags:
+        - "PurchaseOrder"    
   /invoices/{invoiceId}/approve:
     post:
       summary: "Approve a submited invoice as a site engineer"
@@ -158,6 +170,8 @@ paths:
           description: "OK"
         500:
           description: "Error" 
+      tags:
+        - "Invoicing"     
   /invoices/{invoiceId}/purchase-order:
     get:
       summary: "get purchase order related to the invoice"
@@ -170,6 +184,8 @@ paths:
            $ref: '#/definitions/PurchaseOrder'
         500:
           description: "Error"   
+      tags:
+        - "Invoicing"     
 
 definitions:
   PlantHireRequest:
