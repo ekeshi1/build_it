@@ -197,7 +197,20 @@ func (h *HTTPHandler) CreatePlantHire(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "", http.StatusBadRequest)
 		return
 	}
+	if ph.Status == "APPROVED" {
+		var poReq domain.PurchaseOrder
+		poReq.PlantHireId = ph.Id
+		poReq.Description = "Purchase order is created"
+		poReq.Creator = "BUILD_IT"
 
+		po, _ := h.purchaseOrderService.CreatePurchaseOrder(&poReq)
+
+		if po == nil {
+			log.Errorf("Could not create po", err)
+			http.Error(w, "Could not create po but palnt created", http.StatusBadRequest)
+			return
+		}
+	}
 	log.Debug(ph.Id)
 	log.Debug(ph)
 	w.WriteHeader(http.StatusCreated)
