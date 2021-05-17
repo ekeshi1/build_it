@@ -35,29 +35,24 @@ const (
 func init() {
 
 	log.Debug("Init called")
-	pgUser = "postgres"
-	pgPass = "postgres"
-	pgDb = "postgres"
-	pgPort = "5432"
-	pgHost = "95.216.169.123"
 	if logLevel == "" {
 		logLevel = "debug"
 	}
 	if pgUser == "" {
-		log.Fatal("POSTGRES_USER not set")
+		pgUser = "postgres"
 	}
 	if pgPass == "" {
-		log.Fatal("POSTGRES_PASSWORD not set")
+		pgPass = "postgres"
 	}
 	if pgDb == "" {
-		log.Fatal("POSTGRES_DB not set")
+		pgDb = "postgres"
 	}
 
 	if pgHost == "" {
-		log.Fatal("POSTGRES_HOST not set")
+		pgHost = "95.216.169.123"
 	}
 	if pgPort == "" {
-		log.Fatal("POSTGRES_PORT not set")
+		pgPort = "5432"
 	}
 
 	dsn = buildDsn()

@@ -36,7 +36,7 @@ services:
     build: 
       context: .
       dockerfile: test/Dockerfile
-    command: "go test ./test/create_plant_hire_test.go" 
+    command: "go test ./test/..."
 
 
   buildit:  
