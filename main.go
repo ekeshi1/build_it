@@ -33,26 +33,31 @@ const (
 )
 
 func init() {
+	pgUser = "postgres"
+	pgDb = "postgres"
+	pgPass = "postgres"
+	pgHost = "95.216.169.123"
+	pgPort = "5432"
 
 	log.Debug("Init called")
 	if logLevel == "" {
 		logLevel = "debug"
 	}
 	if pgUser == "" {
-		log.Fatal("POSTGRES_USER not set")
+		pgUser = "postgres"
 	}
 	if pgPass == "" {
-		log.Fatal("POSTGRES_PASSWORD not set")
+		pgPass = "postgres"
 	}
 	if pgDb == "" {
-		log.Fatal("POSTGRES_DB not set")
+		pgDb = "postgres"
 	}
 
 	if pgHost == "" {
-		log.Fatal("POSTGRES_HOST not set")
+		pgHost = "95.216.169.123"
 	}
 	if pgPort == "" {
-		log.Fatal("POSTGRES_PORT not set")
+		pgPort = "5432"
 	}
 
 	dsn = buildDsn()
@@ -95,6 +100,7 @@ func main() {
 		Addr:    fmt.Sprintf(":%d", httpServicePort),
 		Handler: httpRouter,
 	}
+	log.Infof("Starting server at port ", httpServicePort)
 	err = httpSrv.ListenAndServe()
 	if err != nil {
 		log.Fatalf("Could not start server")

@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	HTTP_URL_CREATE_PH = "http://localhost:8081/api/plant-hires"
+	HTTP_URL_CREATE_PH = "http://buildit:8081/api/plant-hires"
 )
 
 //CC1
@@ -46,7 +46,7 @@ func TestCreatePlantHire(t *testing.T) {
 
 //CC2
 func TestModifyPlantHireDates(t *testing.T) {
-	url := "http://localhost:8081/api/plant-hires/1"
+	url := "http://buildit:8081/api/plant-hires/1"
 
 	var jsonStr = []byte(`[{"op": "replace", "path": "/plantArrivalDate","value": "2022-05-01T00:00:00Z"}]`)
 	req, _ := http.NewRequest("PATCH", url, bytes.NewBuffer(jsonStr))
@@ -76,7 +76,7 @@ func TestModifyPlantHireDates(t *testing.T) {
 
 //CC4
 func TestGetPlantHireById(t *testing.T) {
-	resp, err := http.Get("http://localhost:8081/api/plant-hires/1")
+	resp, err := http.Get("http://buildit:8081/api/plant-hires/1")
 	if err != nil {
 		t.Error("Problem getting single plant hire via REST.")
 		return
@@ -90,8 +90,8 @@ func TestGetPlantHireById(t *testing.T) {
 
 //CC5
 func TestModifyPlantHireStatus(t *testing.T) {
-	url1 := "http://localhost:8081/api/plant-hires/1/status"
-	url2 := "http://localhost:8081/api/plant-hires/1"
+	url1 := "http://buildit:8081/api/plant-hires/1/status"
+	url2 := "http://buildit:8081/api/plant-hires/1"
 
 	var jsonStr = []byte(`[{"op": "replace", "path": "/status","value": "MODIFIED"}]`)
 	req, _ := http.NewRequest("PATCH", url1, bytes.NewBuffer(jsonStr))
@@ -120,8 +120,8 @@ func TestModifyPlantHireStatus(t *testing.T) {
 
 //CC8
 func TestModifyPlantHireExtension(t *testing.T) {
-	url1 := "http://localhost:8081/api/plant-hires/2/extension"
-	url2 := "http://localhost:8081/api/plant-hires/2"
+	url1 := "http://buildit:8081/api/plant-hires/2/extension"
+	url2 := "http://buildit:8081/api/plant-hires/2"
 
 	var jsonStr = []byte(`{"PlantReturnDate":"2021-06-06T00:00:00Z"}`)
 	req, _ := http.NewRequest("PUT", url1, bytes.NewBuffer(jsonStr))

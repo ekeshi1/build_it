@@ -11,9 +11,9 @@ import (
 
 //CC9
 func TestSubmitInvoice(t *testing.T) {
-	url1 := "http://localhost:8081/api/invoices"
+	url1 := "http://buildit:8081/api/invoices"
 
-	url2 := "http://localhost:8081/api/plant-hires/2/status"
+	url2 := "http://buildit:8081/api/plant-hires/2/status"
 
 	var jsonStr1 = []byte(`[{"op": "replace", "path": "/status","value": "APPROVED"}]`)
 	req1, _ := http.NewRequest("PATCH", url2, bytes.NewBuffer(jsonStr1))
@@ -44,7 +44,7 @@ func TestSubmitInvoice(t *testing.T) {
 
 //CC10
 func TestSubmitInvoiceNonExistPO(t *testing.T) {
-	url := "http://localhost:8081/api/invoices"
+	url := "http://buildit:8081/api/invoices"
 
 	var jsonStr = []byte(`{"PurchaseOrderId":4, "PaymentStatus":"CREATED"}`)
 	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
@@ -65,8 +65,8 @@ func TestSubmitInvoiceNonExistPO(t *testing.T) {
 
 //CC11-CC12
 func TestApproveInvoice(t *testing.T) {
-	url1 := "http://localhost:8081/api/invoices/1/approve"
-	url2 := "http://localhost:8081/api/invoices/1"
+	url1 := "http://buildit:8081/api/invoices/1/approve"
+	url2 := "http://buildit:8081/api/invoices/1"
 
 	var jsonStr = []byte(`{}`)
 	req, _ := http.NewRequest("POST", url1, bytes.NewBuffer(jsonStr))

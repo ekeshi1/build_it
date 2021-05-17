@@ -8,8 +8,8 @@ import (
 
 //CC6
 func TestCreatePO(t *testing.T) {
-	url1 := "http://localhost:8081/api/plant-hires/2/status"
-	url2 := "http://localhost:8081/api/purchase-orders/2"
+	url1 := "http://buildit:8081/api/plant-hires/2/status"
+	url2 := "http://buildit:8081/api/purchase-orders/2"
 
 	var jsonStr = []byte(`[{"op": "replace", "path": "/status","value": "APPROVED"}]`)
 	req, _ := http.NewRequest("PATCH", url1, bytes.NewBuffer(jsonStr))
@@ -34,7 +34,7 @@ func TestCreatePO(t *testing.T) {
 
 //CC7
 func TestGetAllPurchaseOrders(t *testing.T) {
-	url := "http://localhost:8081/api/purchase-orders"
+	url := "http://buildit:8081/api/purchase-orders"
 
 	resp, err := http.Get(url)
 	if err != nil {

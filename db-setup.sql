@@ -31,6 +31,8 @@ create table purchase_orders(
     delivery_status varchar NOT NULL,
     status varchar NOT NULL,
 
+
+
     CONSTRAINT fk_plant
       FOREIGN KEY(plant_hire_id) 
 	  REFERENCES plant_hires(id)
@@ -54,7 +56,7 @@ create table invoices(
     CONSTRAINT fk_purchase_order
       FOREIGN KEY(purchase_order_id) 
 	  REFERENCES purchase_orders(id)
-);
+); 
 
 
 insert into invoices(purchase_order_id, last_reminder_date, payment_status) values (1, '2021-06-15', 'CREATED'), (3, CURRENT_DATE, 'CREATED');

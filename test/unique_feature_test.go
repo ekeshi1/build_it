@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	HTTP_URL        = "http://localhost:8081/api/plant-hires"
-	HTTP_URL_GET_PH = "http://localhost:8081/api/plant-hires/"
+	HTTP_URL        = "http://buildit:8081/api/plant-hires"
+	HTTP_URL_GET_PH = "http://buildit:8081/api/plant-hires/"
 )
 
 //CC13
