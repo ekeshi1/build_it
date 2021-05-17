@@ -33,6 +33,11 @@ const (
 )
 
 func init() {
+	pgUser = "postgres"
+	pgDb = "postgres"
+	pgPass = "postgres"
+	pgHost = "95.216.169.123"
+	pgPort = "5432"
 
 	log.Debug("Init called")
 	if logLevel == "" {
