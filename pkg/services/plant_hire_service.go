@@ -79,6 +79,9 @@ func (s *PlantHireService) ModifyPlantHire(p []byte, id int64) (*domain.PlantHir
 	var modifiedPlantHire *domain.PlantHire
 	json.Unmarshal(modified, &modifiedPlantHire)
 
+	totalPrice, err := s.plantHireRepository.CalculatePrice(modifiedPlantHire.PlantArrivalDate, modifiedPlantHire.PlantReturnDate, modifiedPlantHire.PlantDailyPrice)
+	modifiedPlantHire.PlantTotalPrice = totalPrice
+
 	mph, err1 := s.plantHireRepository.ModifyPlantHire(plantHire, modifiedPlantHire)
 	if err1 != nil {
 		log.Errorf("Couldn't update plant with error: ", err)
@@ -112,7 +115,7 @@ func (s *PlantHireService) ModifyPlantHireExtension(id int64, p *domain.PlantHir
 	modifiedPlantHire.PlantReturnDate = p.PlantReturnDate
 	fmt.Println(plantHire.PlantArrivalDate)
 	fmt.Println(p.PlantReturnDate)
-	totalPrice, err := s.plantHireRepository.CalculatePrice(plantHire.PlantArrivalDate, p.PlantReturnDate, 127.00)
+	totalPrice, err := s.plantHireRepository.CalculatePrice(plantHire.PlantArrivalDate, p.PlantReturnDate, plantHire.PlantDailyPrice)
 	plantHire.PlantTotalPrice = totalPrice
 	fmt.Println(totalPrice)
 	fmt.Println(plantHire)

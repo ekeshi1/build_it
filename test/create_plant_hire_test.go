@@ -12,10 +12,10 @@ import (
 )
 
 var (
-	HTTP_URL_CREATE_PH = "http://buildit:8080/api/plant-hires"
+	HTTP_URL_CREATE_PlantH = "http://buildit:8080/api/plant-hires"
 )
 
-func TestCreatePlantHire(t *testing.T) {
+func TestCreatePlantHirse(t *testing.T) {
 	a := `{
 		"plantId": 22602061,
 		"constructionSiteId": -11449460,
@@ -26,7 +26,7 @@ func TestCreatePlantHire(t *testing.T) {
 		"plantDailyPrice": 1.0
 	}`
 	var jsonStr = []byte(a)
-	req, _ := http.NewRequest("POST", HTTP_URL_CREATE_PH, bytes.NewBuffer(jsonStr))
+	req, _ := http.NewRequest("POST", HTTP_URL_CREATE_PlantH, bytes.NewBuffer(jsonStr))
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
