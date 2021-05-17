@@ -37,8 +37,8 @@ services:
       context: .
       dockerfile: test/Dockerfile
     command: "go test ./test/create_plant_hire_test.go" 
-    networks: 
-      - local
+
+
   buildit:  
     build: . # uses Dockerfile in root dir to build the image
     ports:
@@ -54,10 +54,6 @@ services:
     restart: on-failure  
     #depends_on: [postgres,kafka,zookeeper]   
     depends_on: [db]   
-    networks:
-      - local
+
     #links: [kafka,zookeeper]
 
-networks:
-  local:
-    driver: bridge

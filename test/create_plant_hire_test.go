@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	HTTP_URL_CREATE_PH = "http://build_it_buildit_1:8080/api/plant-hires"
+	HTTP_URL_CREATE_PH = "http://buildit:8080/api/plant-hires"
 )
 
 func TestCreatePlantHire(t *testing.T) {
