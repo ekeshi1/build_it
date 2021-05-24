@@ -36,7 +36,7 @@ Stop  <br/>
 docker-compose down -v
 ```
 * Testing
-[Aceptance Test](https://github.com/ekeshi1/build_it/CC5-CC8-Orkhan/documentation/Acceptance%20test.yml)
+[Aceptance Test](https://github.com/ekeshi1/build_it/blob/master/documentation/Acceptance%20test.yml)
 ### Structure
 1. main.go 
 2. pkg
