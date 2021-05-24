@@ -36,7 +36,7 @@ Stop  <br/>
 docker-compose down -v
 ```
 * Testing
-[Aceptance Test](https://github.com/cs-ut-ee/project-group-8/blob/CC5-CC8-Orkhan/documentation/Acceptance%20test.yml)
+[Aceptance Test](https://github.com/ekeshi1/build_it/blob/CC5-CC8-Orkhan/documentation/Acceptance%20test.yml)
 ### Structure
 1. main.go 
 2. pkg
@@ -49,5 +49,4 @@ docker-compose down -v
 3. tests
 4. Documentation
 
-### Project management
-1. [Project management](https://github.com/cs-ut-ee/project-group-8/tree/CC5-CC8-Orkhan/documentation/Project%20management%20-%20team%20log)
+
